@@ -6,7 +6,6 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.entity.Cliente;
 import com.utn.entity.Servicio;
 import com.utn.repository.ClienteRepository;
-import com.utn.repository.MesaAyudaRepository;
 import com.utn.repository.ServicioRepository;
 import com.utn.utils.ClienteMapper;
 import org.modelmapper.ModelMapper;
@@ -20,17 +19,13 @@ public class ClienteServiceImpl implements IClienteService{
 
     ClienteRepository repository;
 
-    MesaAyudaRepository mesaRepository;
-
     ServicioRepository servicioRepository;
 
     ModelMapper mapper;
 
-    public ClienteServiceImpl(ClienteRepository repository, ServicioRepository serv,
-                              MesaAyudaRepository mesaRepository) {
+    public ClienteServiceImpl(ClienteRepository repository, ServicioRepository serv) {
         this.repository = repository;
         this.servicioRepository = serv;
-        this.mesaRepository = mesaRepository;
         this.mapper = new ModelMapper();
     }
 
