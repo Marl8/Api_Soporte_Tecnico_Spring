@@ -5,10 +5,10 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseProblemaDto;
 import com.utn.entity.TipoProblema;
 import com.utn.repository.ProblemaRepository;
+import com.utn.utils.TipoProblemaMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProblemaServiceImpl implements IProblemaService{
@@ -22,7 +22,7 @@ public class ProblemaServiceImpl implements IProblemaService{
     @Override
     public ResponseProblemaDto guardar(TipoProblemaDto problemaDto) {
         ModelMapper mapper = new ModelMapper();
-        TipoProblema problema = mapper.map(problemaDto, TipoProblema.class);
+        TipoProblema problema = TipoProblemaMapper.tipoProblemaSaveMapper(problemaDto);
 
         if(verificarSiExiste(problema)){
             throw new RuntimeException("El tipo de problema ya existe.");
@@ -36,11 +36,8 @@ public class ProblemaServiceImpl implements IProblemaService{
     public TipoProblemaDto findProblema(Long id) {
 
         ModelMapper mapper = new ModelMapper();
-
-        if(!repository.existsById(id)){
-            throw new RuntimeException("No existen servicios con ese id.");
-        }
-        TipoProblema problema = repository.findById(id).get();
+        TipoProblema problema = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("No existen problemas con este id."));
         return mapper.map(problema, TipoProblemaDto.class);
     }
 
@@ -49,26 +46,24 @@ public class ProblemaServiceImpl implements IProblemaService{
     public ResponseProblemaDto modificar(TipoProblemaDto problemaDto) {
         ModelMapper mapper = new ModelMapper();
         TipoProblema problema = mapper.map(problemaDto, TipoProblema.class);
-        Optional<TipoProblema> encontrado = repository.findById(problema.getId());
+        TipoProblema encontrado = repository.findById(problema.getId())
+                .orElseThrow(() -> new RuntimeException("No se encontraron problemas asociados a este id"));
 
-        if (encontrado.isPresent()) {
-            TipoProblema modificado = encontrado.get();
-            modificado.setEspecialidad(problema.getEspecialidad());
-            modificado.setDescripcion(problema.getDescripcion());
-            modificado.setTiempoEstimado(problema.getTiempoEstimado());
-            modificado.setIncidente(problema.getIncidente());
-        }
-        TipoProblemaDto respuesta = mapper.map(problema, TipoProblemaDto.class);
+            encontrado.setEspecialidad(problema.getEspecialidad());
+            encontrado.setDescripcion(problema.getDescripcion());
+            encontrado.setTiempoEstimado(problema.getTiempoEstimado());
+            encontrado.setIncidente(problema.getIncidente());
+
+        TipoProblema problem = repository.save(encontrado);
+        TipoProblemaDto respuesta = mapper.map(problem, TipoProblemaDto.class);
         return new ResponseProblemaDto(respuesta, "Tipo de problema modificado con éxito");
     }
 
     @Override
     public ResponseDto eliminar(Long id) {
-        Optional<TipoProblema> problema = repository.findById(id);
-
-        if(problema.isPresent()){
-            repository.deleteById(id);
-        }
+        TipoProblema problema = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Tipo de problema no encontrado"));
+        repository.deleteById(id);
         return new ResponseDto("Problema eliminado con éxito");
     }
 

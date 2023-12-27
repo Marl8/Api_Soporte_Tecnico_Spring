@@ -18,5 +18,5 @@ public interface IEspecialidadService {
 
     Set<EspecialidadDto> findAll();
 
-    ResponseDto asignarEspecialidadATecnico(Long idEspecialidad, Long idTecnico);
+    ResponseDto asignarProblema(Long idEspecialidad, Long idTProblema);
 }

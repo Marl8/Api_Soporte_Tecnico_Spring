@@ -37,9 +37,9 @@ public class EspecialidadController {
         return new ResponseEntity<>(service.modificar(especialidadDto), HttpStatus.OK);
     }
 
-    @PutMapping("/asignar/{idEspecialidad}/{idTecnico}")
+    @PutMapping("/asignar/{idEspecialidad}/{idProblema}")
     public ResponseEntity<?> asignar(@PathVariable Long idEspecialidad, @PathVariable Long idTecnico) {
-        return new ResponseEntity<>(service.asignarEspecialidadATecnico(idEspecialidad, idTecnico), HttpStatus.OK);
+        return new ResponseEntity<>(service.asignarProblema(idEspecialidad, idTecnico), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

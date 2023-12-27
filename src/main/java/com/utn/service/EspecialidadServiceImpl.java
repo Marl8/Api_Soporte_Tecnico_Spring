@@ -5,8 +5,11 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
 import com.utn.entity.Tecnico;
+import com.utn.entity.TipoProblema;
 import com.utn.repository.EspecialidadRepository;
+import com.utn.repository.ProblemaRepository;
 import com.utn.repository.TecnicoRepository;
+import com.utn.utils.EspecialidadMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,19 +22,20 @@ import java.util.stream.Collectors;
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService {
 
-    EspecialidadRepository repository;
+    private final EspecialidadRepository repository;
 
-    TecnicoRepository tecnicoRepository;
+    private final ProblemaRepository problemaRepository;
 
-    public EspecialidadServiceImpl(EspecialidadRepository repository, TecnicoRepository tec) {
+
+    public EspecialidadServiceImpl(EspecialidadRepository repository, ProblemaRepository probl) {
         this.repository = repository;
-        this.tecnicoRepository = tec;
+        this.problemaRepository = probl;
     }
 
     @Override
     public ResponseEspecialidadDto guardar(EspecialidadDto especialidadDto) {
         ModelMapper mapper = new ModelMapper();
-        Especialidad especialidad = mapper.map(especialidadDto, Especialidad.class);
+        Especialidad especialidad = EspecialidadMapper.especialidadSaveMapper(especialidadDto);
 
         if(verificarSiExiste(especialidad)){
             throw new RuntimeException("La especialidad ya existe.");
@@ -42,23 +46,21 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     }
 
     @Override
-    public ResponseDto asignarEspecialidadATecnico(Long idEspecialidad, Long idTecnico) {
+    public ResponseDto asignarProblema(Long idEspecialidad, Long idProblema) {
         Especialidad esp = repository.findById(idEspecialidad)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        Tecnico tecnico = tecnicoRepository.findById(idTecnico)
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
-        esp.getListaTecnicos().add(tecnico);
+                .orElseThrow(() -> new RuntimeException("Técnico no encontrado"));
+        TipoProblema problema = problemaRepository.findById(idProblema)
+                .orElseThrow(() -> new RuntimeException("Técnico no encontrado"));
+        esp.getListaProblemas().add(problema);
         repository.save(esp);
         return new ResponseDto("Asignación realizada con éxito");
     }
+
     @Override
     public EspecialidadDto findEspecialidad(Long id) {
         ModelMapper mapper = new ModelMapper();
-
-        if(!repository.existsById(id)){
-            throw new RuntimeException("No existen servicios con ese id.");
-        }
-        Especialidad esp = repository.findById(id).get();
+        Especialidad esp = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("No existen especialidades con este id."));
         return mapper.map(esp, EspecialidadDto.class);
     }
 
@@ -66,27 +68,23 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     public Set<EspecialidadDto> findAll() {
         ModelMapper mapper = new ModelMapper();
         List<Especialidad> especialidades = repository.findAll();
-        Set<Especialidad> result = new HashSet<>(especialidades);
-        return result.stream().map(e -> new EspecialidadDto(e.getId(),
-                e.getDescripcion(), e.getNombre(), e.getListaProblemas(),
-                e.getListaTecnicos())).collect(Collectors.toSet());
+        return EspecialidadMapper.especialidadFindAllMapper(especialidades);
     }
 
-    @Transactional
     @Override
     public ResponseEspecialidadDto modificar(EspecialidadDto especialidadDto) {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = mapper.map(especialidadDto, Especialidad.class);
-        Optional<Especialidad> encontrado = repository.findById(esp.getId());
+        Especialidad encontrado = repository.findById(esp.getId())
+                .orElseThrow(() -> new RuntimeException("Especialidad inexistente."));
 
-        if (encontrado.isPresent()) {
-            Especialidad modificado = encontrado.get();
-            modificado.setNombre(esp.getNombre());
-            modificado.setDescripcion(esp.getDescripcion());
-            modificado.setListaTecnicos(esp.getListaTecnicos());
-            modificado.setListaProblemas(esp.getListaProblemas());
-        }
-        EspecialidadDto respuesta = mapper.map(esp, EspecialidadDto.class);
+            encontrado.setNombre(esp.getNombre());
+            encontrado.setDescripcion(esp.getDescripcion());
+            encontrado.setListaTecnicos(esp.getListaTecnicos());
+            encontrado.setListaProblemas(esp.getListaProblemas());
+
+            Especialidad especialidad = repository.save(encontrado);
+        EspecialidadDto respuesta = mapper.map(especialidad, EspecialidadDto.class);
         return new ResponseEspecialidadDto(respuesta, "Servicio modificado con éxito");
     }
 
