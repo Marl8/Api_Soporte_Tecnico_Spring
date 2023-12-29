@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.OperadorDto;
-import com.utn.service.IOperadorService;
+import com.utn.service.Interfaces.IOperadorService;
 import com.utn.service.OperadorServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

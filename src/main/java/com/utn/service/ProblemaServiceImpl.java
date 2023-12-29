@@ -5,13 +5,14 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseProblemaDto;
 import com.utn.entity.TipoProblema;
 import com.utn.repository.ProblemaRepository;
+import com.utn.service.Interfaces.IProblemaService;
 import com.utn.utils.TipoProblemaMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProblemaServiceImpl implements IProblemaService{
+public class ProblemaServiceImpl implements IProblemaService {
 
     ProblemaRepository repository;
 

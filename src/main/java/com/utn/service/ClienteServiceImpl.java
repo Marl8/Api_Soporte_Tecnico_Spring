@@ -7,6 +7,7 @@ import com.utn.entity.Cliente;
 import com.utn.entity.Servicio;
 import com.utn.repository.ClienteRepository;
 import com.utn.repository.ServicioRepository;
+import com.utn.service.Interfaces.IClienteService;
 import com.utn.utils.ClienteMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-public class ClienteServiceImpl implements IClienteService{
+public class ClienteServiceImpl implements IClienteService {
 
     ClienteRepository repository;
 

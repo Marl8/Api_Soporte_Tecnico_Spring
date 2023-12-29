@@ -2,7 +2,7 @@ package com.utn.controller;
 
 import com.utn.dto.request.ClienteDto;
 import com.utn.service.ClienteServiceImpl;
-import com.utn.service.IClienteService;
+import com.utn.service.Interfaces.IClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,7 @@
 package com.utn.utils;
 
 import com.utn.dto.request.EspecialidadDto;
+import com.utn.dto.request.EspecialidadFindDto;
 import com.utn.entity.Especialidad;
 
 import java.util.HashSet;
@@ -14,14 +15,12 @@ public class EspecialidadMapper {
         Especialidad especialidad = new Especialidad();
         especialidad.setDescripcion(especialidadDto.getDescripcion());
         especialidad.setNombre(especialidadDto.getNombre());
-        especialidad.setListaProblemas(especialidadDto.getListaProblemas());
         return especialidad;
     }
 
-    public static Set<EspecialidadDto> especialidadFindAllMapper(List<Especialidad> especialidades) {
+    public static Set<EspecialidadFindDto> especialidadFindAllMapper(List<Especialidad> especialidades) {
         Set<Especialidad> result = new HashSet<>(especialidades);
-        return result.stream().map(e -> new EspecialidadDto(e.getId(),
-                e.getDescripcion(), e.getNombre(), e.getListaProblemas(),
-                e.getListaTecnicos())).collect(Collectors.toSet());
+        return result.stream().map(e -> new EspecialidadFindDto(e.getDescripcion(), e.getNombre()
+        ,e.getListaProblemas(), e.getListaTecnicos())).collect(Collectors.toSet());
     }
 }

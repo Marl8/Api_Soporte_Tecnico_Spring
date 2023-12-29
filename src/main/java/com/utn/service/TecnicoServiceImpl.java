@@ -8,6 +8,8 @@ import com.utn.entity.Especialidad;
 import com.utn.entity.Tecnico;
 import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.TecnicoRepository;
+import com.utn.service.Interfaces.ITecnicoService;
+import com.utn.utils.TecnicoMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class TecnicoServiceImpl implements ITecnicoService{
+public class TecnicoServiceImpl implements ITecnicoService {
 
     TecnicoRepository repository;
 
@@ -33,11 +35,21 @@ public class TecnicoServiceImpl implements ITecnicoService{
     @Override
     public ResponseTecnicoDto guardar(TecnicoDto tecnicoDto) {
         ModelMapper mapper = new ModelMapper();
-        Tecnico tecnico = mapper.map(tecnicoDto, Tecnico.class);
+        Tecnico tecnico = TecnicoMapper.tecnicoSaveMapper(tecnicoDto);
 
-        if(verificarSiExiste(tecnico)){
-            throw new RuntimeException("La especialidad ya existe.");
+        Optional<Tecnico> encontrado = repository.findTecnicoByNombreAndApellido(
+                tecnico.getNombre(), tecnico.getApellido());
+
+        if(encontrado.isPresent()) {
+            throw new RuntimeException("Ya existe el técnico");
         }
+        Set<Especialidad> listaEspecialidades = new HashSet<>();
+        tecnicoDto.getListaEspecialidades().forEach(e -> {
+            Especialidad esp = especialidadRepository.findById(e).orElseThrow(() ->
+                    new RuntimeException("Especialidad Not found"));
+            listaEspecialidades.add(esp);
+        });
+        tecnico.setListaEspecialidades(listaEspecialidades);
         repository.save(tecnico);
         TecnicoDto response = mapper.map(tecnico,TecnicoDto.class);
         return new ResponseTecnicoDto(response, "Técnico guardado con éxito");
@@ -79,18 +91,17 @@ public class TecnicoServiceImpl implements ITecnicoService{
     public ResponseTecnicoDto modificar(TecnicoDto tecnicoDto) {
         ModelMapper mapper = new ModelMapper();
         Tecnico tecnico = mapper.map(tecnicoDto, Tecnico.class);
-        Optional<Tecnico> encontrado = repository.findById(tecnico.getId());
+        Tecnico encontrado = repository.findById(tecnico.getId())
+                .orElseThrow(() -> new RuntimeException("Técnico Not found"));
+        encontrado.setNombre(tecnico.getNombre());
+        encontrado.setApellido(tecnico.getApellido());
+        encontrado.setDisponibilidad(tecnico.isDisponibilidad());
+        encontrado.setIncidentes(tecnico.getIncidentes());
+        encontrado.setListaEspecialidades(tecnico.getListaEspecialidades());
+        encontrado.setNotificacion(tecnico.getNotificacion());
 
-        if (encontrado.isPresent()) {
-            Tecnico modificado = encontrado.get();
-            modificado.setNombre(tecnico.getNombre());
-            modificado.setApellido(tecnico.getApellido());
-            modificado.setDisponibilidad(tecnico.isDisponibilidad());
-            modificado.setIncidentes(tecnico.getIncidentes());
-            modificado.setListaEspecialidades(tecnico.getListaEspecialidades());
-            modificado.setNotificacion(tecnico.getNotificacion());
-        }
-        TecnicoDto respuesta = mapper.map(tecnico, TecnicoDto.class);
+        Tecnico modificado = repository.save(encontrado);
+        TecnicoDto respuesta = mapper.map(modificado, TecnicoDto.class);
         return new ResponseTecnicoDto(respuesta, "Técnico modificado con éxito");
     }
 
@@ -102,22 +113,5 @@ public class TecnicoServiceImpl implements ITecnicoService{
             repository.deleteById(id);
         }
         return new ResponseDto("Técnico eliminado con éxito");
-    }
-
-
-    private boolean verificarSiExiste(Tecnico tecnico){
-
-        List<Tecnico> lista = repository.findAll();
-        if(lista.isEmpty()){
-            return false;
-        }
-        List<Tecnico> listaBusqueda = lista.stream()
-                .filter(t -> t.getNombre().equals(tecnico.getNombre())
-                        && t.getApellido().equals(t.getApellido()))
-                .toList();
-        if(listaBusqueda.isEmpty()){
-            return false;
-        }
-        return true;
     }
 }

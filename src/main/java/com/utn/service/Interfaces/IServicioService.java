@@ -1,4 +1,4 @@
-package com.utn.service;
+package com.utn.service.Interfaces;
 
 import com.utn.dto.request.ServicioDto;
 import com.utn.dto.response.ResponseDto;
@@ -17,7 +17,5 @@ public interface IServicioService {
     ResponseDto eliminar(Long id);
 
     Set<ServicioDto> findAll();
-
-    ResponseDto asignarServicioACliente(Long idCliente, Long idServicio);
 }
 

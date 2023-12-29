@@ -27,8 +27,4 @@ public class Servicio{
 
     @ManyToMany(mappedBy = "servicios")
     private Set<Cliente> clientes = new HashSet<>();
-
-    public void agregarCliente(Cliente cliente) {
-        this.clientes.add(cliente);
-    }
 }

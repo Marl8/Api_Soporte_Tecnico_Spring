@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.IncidenteDto;
-import com.utn.service.IIncidenteService;
+import com.utn.service.Interfaces.IIncidenteService;
 import com.utn.service.IncidenteServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,11 @@ public class IncidenteController {
     @PostMapping
     public ResponseEntity<?> guardar(@RequestBody IncidenteDto incidenteDto){
         return new ResponseEntity<>(service.guardar(incidenteDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/asignarHoras/{idIncidente}/{horas}")
+    public ResponseEntity<?> asignarHorasColchon(@PathVariable Long idIncidente, @PathVariable int horas){
+        return new ResponseEntity<>(service.asignarHorasColchon(idIncidente, horas), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

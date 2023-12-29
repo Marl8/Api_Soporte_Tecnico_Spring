@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.TipoProblemaDto;
-import com.utn.service.IProblemaService;
+import com.utn.service.Interfaces.IProblemaService;
 import com.utn.service.ProblemaServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

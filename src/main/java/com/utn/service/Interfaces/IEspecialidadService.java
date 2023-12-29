@@ -1,6 +1,7 @@
-package com.utn.service;
+package com.utn.service.Interfaces;
 
 import com.utn.dto.request.EspecialidadDto;
+import com.utn.dto.request.EspecialidadFindDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 
@@ -10,13 +11,12 @@ public interface IEspecialidadService {
 
     ResponseEspecialidadDto guardar(EspecialidadDto especialidadDto);
 
-    EspecialidadDto findEspecialidad(Long id);
+    EspecialidadFindDto findEspecialidad(Long id);
 
     ResponseEspecialidadDto modificar(EspecialidadDto especialidadDto);
 
     ResponseDto eliminar(Long id);
 
-    Set<EspecialidadDto> findAll();
-
+    Set<EspecialidadFindDto> findAll();
     ResponseDto asignarProblema(Long idEspecialidad, Long idTProblema);
 }

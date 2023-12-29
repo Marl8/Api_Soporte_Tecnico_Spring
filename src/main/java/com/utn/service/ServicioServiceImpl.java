@@ -7,6 +7,8 @@ import com.utn.entity.Cliente;
 import com.utn.entity.Servicio;
 import com.utn.repository.ClienteRepository;
 import com.utn.repository.ServicioRepository;
+import com.utn.service.Interfaces.IServicioService;
+import com.utn.utils.ServicioMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class ServicioServiceImpl implements IServicioService{
+public class ServicioServiceImpl implements IServicioService {
 
     ServicioRepository repository;
 
@@ -30,7 +32,7 @@ public class ServicioServiceImpl implements IServicioService{
     @Override
     public ResponseServicioDto guardarServicio(ServicioDto servicioDto) {
         ModelMapper mapper = new ModelMapper();
-        Servicio servicio = mapper.map(servicioDto, Servicio.class);
+        Servicio servicio = ServicioMapper.servicioSaveMapper(servicioDto);
 
         if(verificarSiExiste(servicio)){
             throw new RuntimeException("El servicio ya existe.");
@@ -40,18 +42,6 @@ public class ServicioServiceImpl implements IServicioService{
         return new ResponseServicioDto(response, "Servicio guardado con éxito.");
     }
 
-    @Override
-    public ResponseDto asignarServicioACliente(Long idCliente, Long idServicio) {
-        ModelMapper mapper = new ModelMapper();
-        Cliente cliente = clienteRepository.findById(idCliente)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-        Servicio servicio = repository.findById(idServicio)
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
-        servicio.getClientes().add(cliente);
-        ServicioDto clienteResponse = mapper.map(servicio, ServicioDto.class);
-        this.modificar(clienteResponse);
-        return new ResponseDto("Asignación realizada con éxito");
-    }
     @Override
     public ServicioDto findServicio(Long id) {
         ModelMapper mapper = new ModelMapper();
@@ -69,8 +59,7 @@ public class ServicioServiceImpl implements IServicioService{
         List<Servicio> servicios = repository.findAll();
         Set<Servicio> result = new HashSet<>(servicios);
         return result.stream().map(s -> new ServicioDto(s.getId(),
-                s.getDescripcion(), s.getTipoServicio(),
-                s.getClientes())).collect(Collectors.toSet());
+                s.getDescripcion(), s.getTipoServicio())).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -78,15 +67,15 @@ public class ServicioServiceImpl implements IServicioService{
     public ResponseServicioDto modificar(ServicioDto servicioDto) {
         ModelMapper mapper = new ModelMapper();
         Servicio servicio = mapper.map(servicioDto, Servicio.class);
-        Optional<Servicio> encontrado = repository.findById(servicio.getId());
+        Servicio encontrado = repository.findById(servicio.getId())
+                .orElseThrow(() -> new RuntimeException("No se encontraron servicios con este id"));
 
-        if (encontrado.isPresent()) {
-            Servicio modificado = encontrado.get();
-            modificado.setTipoServicio(servicio.getTipoServicio());
-            modificado.setDescripcion(servicio.getDescripcion());
-            modificado.setClientes(servicio.getClientes());
-        }
-        ServicioDto respuesta = mapper.map(servicio, ServicioDto.class);
+        encontrado.setTipoServicio(servicio.getTipoServicio());
+        encontrado.setDescripcion(servicio.getDescripcion());
+        encontrado.setClientes(servicio.getClientes());
+
+        Servicio modificado = repository.save(encontrado);
+        ServicioDto respuesta = mapper.map(modificado, ServicioDto.class);
         return new ResponseServicioDto(respuesta, "Servicio modificado con éxito");
     }
 

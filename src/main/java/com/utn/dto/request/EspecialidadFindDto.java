@@ -11,9 +11,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class EspecialidadDto {
+public class EspecialidadFindDto {
 
     private String nombre;
     private String descripcion;
-    private Set<Long> listaProblemas;
+    private Set<TipoProblema> listaProblemas;
+    private Set<Tecnico> listaTecnicos;
 }

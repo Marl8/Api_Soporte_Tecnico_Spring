@@ -1,4 +1,4 @@
-package com.utn.service;
+package com.utn.service.Interfaces;
 
 import com.utn.dto.request.OperadorDto;
 import com.utn.dto.response.ResponseDto;

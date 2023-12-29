@@ -20,8 +20,8 @@ public class IncidenteDto {
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaCierre;
     private int horaColchon;
-    private Servicio servicio;
-    private Tecnico tecnico;
-    private Cliente cliente;
-    private Set<TipoProblema> listaProblemas;
+    private Long idServicio;
+    private Long idTecnico;
+    private Long idCliente;
+    private Set<Long> listaProblemas;
 }

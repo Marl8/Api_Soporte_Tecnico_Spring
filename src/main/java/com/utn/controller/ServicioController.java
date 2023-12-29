@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.ServicioDto;
-import com.utn.service.IServicioService;
+import com.utn.service.Interfaces.IServicioService;
 import com.utn.service.ServicioServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +35,6 @@ public class ServicioController {
     @PutMapping
     public ResponseEntity<?> modificar(@RequestBody ServicioDto servicioDto) {
         return new ResponseEntity<>(service.modificar(servicioDto), HttpStatus.OK);
-    }
-
-    @PutMapping("/asignar")
-    public ResponseEntity<?> asignar(@PathVariable Long idCliente, @PathVariable Long idServicio) {
-        return new ResponseEntity<>(service.asignarServicioACliente(idCliente, idServicio), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

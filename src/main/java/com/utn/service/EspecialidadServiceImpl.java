@@ -1,23 +1,22 @@
 package com.utn.service;
 
 import com.utn.dto.request.EspecialidadDto;
+import com.utn.dto.request.EspecialidadFindDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
-import com.utn.entity.Tecnico;
 import com.utn.entity.TipoProblema;
 import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.ProblemaRepository;
-import com.utn.repository.TecnicoRepository;
+import com.utn.service.Interfaces.IEspecialidadService;
 import com.utn.utils.EspecialidadMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService {
@@ -40,6 +39,13 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
         if(verificarSiExiste(especialidad)){
             throw new RuntimeException("La especialidad ya existe.");
         }
+        Set<TipoProblema> problemas = new HashSet<>();
+        especialidadDto.getListaProblemas().forEach(p -> {
+            TipoProblema problema = problemaRepository.findById(p).orElseThrow(
+                    () -> new RuntimeException("No existen problemas con este id."));
+            problemas.add(problema);
+        });
+        especialidad.setListaProblemas(problemas);
         repository.save(especialidad);
         EspecialidadDto response = mapper.map(especialidad, EspecialidadDto.class);
         return new ResponseEspecialidadDto(response, "Especialidad guardada con éxito");
@@ -57,15 +63,15 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     }
 
     @Override
-    public EspecialidadDto findEspecialidad(Long id) {
+    public EspecialidadFindDto findEspecialidad(Long id) {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = repository.findById(id).orElseThrow(
                 () -> new RuntimeException("No existen especialidades con este id."));
-        return mapper.map(esp, EspecialidadDto.class);
+        return mapper.map(esp, EspecialidadFindDto.class);
     }
 
     @Override
-    public Set<EspecialidadDto> findAll() {
+    public Set<EspecialidadFindDto> findAll() {
         ModelMapper mapper = new ModelMapper();
         List<Especialidad> especialidades = repository.findAll();
         return EspecialidadMapper.especialidadFindAllMapper(especialidades);

@@ -15,5 +15,4 @@ public class ServicioDto {
     private Long id;
     private String tipoServicio;
     private String descripcion;
-    private Set<Cliente> clientes;
 }

@@ -9,6 +9,7 @@ import com.utn.entity.Tecnico;
 import com.utn.repository.IncidenteRepository;
 import com.utn.repository.OperadorRepository;
 import com.utn.repository.TecnicoRepository;
+import com.utn.service.Interfaces.IOperadorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-public class OperadorServiceImpl implements IOperadorService{
+public class OperadorServiceImpl implements IOperadorService {
 
     OperadorRepository repository;
 

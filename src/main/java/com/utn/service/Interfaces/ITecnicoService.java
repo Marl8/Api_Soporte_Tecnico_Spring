@@ -1,4 +1,4 @@
-package com.utn.service;
+package com.utn.service.Interfaces;
 
 import com.utn.dto.request.TecnicoDto;
 import com.utn.dto.request.TecnicoFindDto;

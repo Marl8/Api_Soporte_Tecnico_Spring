@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.EspecialidadDto;
-import com.utn.service.IEspecialidadService;
+import com.utn.service.Interfaces.IEspecialidadService;
 import com.utn.service.EspecialidadServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

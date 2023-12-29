@@ -1,4 +1,4 @@
-package com.utn.service;
+package com.utn.service.Interfaces;
 
 import com.utn.dto.request.TipoProblemaDto;
 import com.utn.dto.response.ResponseDto;

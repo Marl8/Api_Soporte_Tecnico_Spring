@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.TecnicoDto;
-import com.utn.service.ITecnicoService;
+import com.utn.service.Interfaces.ITecnicoService;
 import com.utn.service.TecnicoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

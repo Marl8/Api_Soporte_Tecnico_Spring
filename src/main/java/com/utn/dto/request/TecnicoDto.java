@@ -19,8 +19,5 @@ public class TecnicoDto {
     private String apellido;
     private boolean disponibilidad;
     private MedioNotificacionEnum notificacion;
-    private Set<Especialidad> listaEspecialidades;
-    private Operador operador;
-    private Set<Incidente> incidentes;
-
+    private Set<Long> listaEspecialidades;
 }
