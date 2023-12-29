@@ -1,6 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.service.ClienteServiceImpl;
 import com.utn.service.Interfaces.IClienteService;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ClienteController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<?> modificar(@RequestBody ClienteUpdateDto clienteDto) {
         return new ResponseEntity<>(service.modificar(clienteDto), HttpStatus.OK);
     }
 

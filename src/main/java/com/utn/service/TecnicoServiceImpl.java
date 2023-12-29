@@ -2,6 +2,7 @@ package com.utn.service;
 
 import com.utn.dto.request.TecnicoDto;
 import com.utn.dto.request.TecnicoFindDto;
+import com.utn.dto.request.TecnicoUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseTecnicoDto;
 import com.utn.entity.Especialidad;
@@ -88,7 +89,7 @@ public class TecnicoServiceImpl implements ITecnicoService {
 
     @Transactional
     @Override
-    public ResponseTecnicoDto modificar(TecnicoDto tecnicoDto) {
+    public ResponseTecnicoDto modificar(TecnicoUpdateDto tecnicoDto) {
         ModelMapper mapper = new ModelMapper();
         Tecnico tecnico = mapper.map(tecnicoDto, Tecnico.class);
         Tecnico encontrado = repository.findById(tecnico.getId())

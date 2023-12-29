@@ -1,14 +1,17 @@
 package com.utn.dto.request;
 
+import com.utn.entity.Incidente;
+import com.utn.entity.Servicio;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ClienteDto {
+public class ClienteUpdateDto {
 
     private Long id;
     private String nombre;
@@ -17,5 +20,6 @@ public class ClienteDto {
     private String telefono;
     private String cuit;
     private String correoElectronico;
-    private Set<Long> serviciosId;
+    private Set<Incidente> incidentes;
+    private Set<Servicio> servicios;
 }

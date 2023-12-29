@@ -1,6 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.EspecialidadDto;
+import com.utn.dto.request.EspecialidadUpdateDto;
 import com.utn.service.Interfaces.IEspecialidadService;
 import com.utn.service.EspecialidadServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class EspecialidadController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@RequestBody EspecialidadDto especialidadDto) {
+    public ResponseEntity<?> modificar(@RequestBody EspecialidadUpdateDto especialidadDto) {
         return new ResponseEntity<>(service.modificar(especialidadDto), HttpStatus.OK);
     }
 

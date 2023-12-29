@@ -1,6 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.TecnicoDto;
+import com.utn.dto.request.TecnicoUpdateDto;
 import com.utn.service.Interfaces.ITecnicoService;
 import com.utn.service.TecnicoServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class TecnicoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@RequestBody TecnicoDto tecnicoDto) {
+    public ResponseEntity<?> modificar(@RequestBody TecnicoUpdateDto tecnicoDto) {
         return new ResponseEntity<>(service.modificar(tecnicoDto), HttpStatus.OK);
     }
 

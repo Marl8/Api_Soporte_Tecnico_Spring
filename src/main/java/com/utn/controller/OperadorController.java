@@ -1,6 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.OperadorDto;
+import com.utn.dto.request.OperadorUpdateDto;
 import com.utn.service.Interfaces.IOperadorService;
 import com.utn.service.OperadorServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class OperadorController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@RequestBody OperadorDto operadorDto) {
+    public ResponseEntity<?> modificar(@RequestBody OperadorUpdateDto operadorDto) {
         return new ResponseEntity<>(service.modificar(operadorDto), HttpStatus.OK);
     }
 

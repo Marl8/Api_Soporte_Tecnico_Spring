@@ -1,6 +1,7 @@
 package com.utn.service;
 
 import com.utn.dto.request.IncidenteDto;
+import com.utn.dto.request.IncidenteUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseIncidenteDto;
 import com.utn.entity.Cliente;
@@ -92,7 +93,7 @@ public class IncidenteServiceImpl implements IIncidenteService {
     }
 
     @Override
-    public ResponseIncidenteDto modificar(IncidenteDto incidenteDto) {
+    public ResponseIncidenteDto modificar(IncidenteUpdateDto incidenteDto) {
         ModelMapper mapper = new ModelMapper();
         Incidente incidente = mapper.map(incidenteDto, Incidente.class);
         Incidente encontrado = repository.findById(incidente.getId())

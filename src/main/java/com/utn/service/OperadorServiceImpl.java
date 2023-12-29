@@ -1,6 +1,7 @@
 package com.utn.service;
 
 import com.utn.dto.request.OperadorDto;
+import com.utn.dto.request.OperadorUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseOperadorDto;
 import com.utn.entity.Incidente;
@@ -57,7 +58,7 @@ public class OperadorServiceImpl implements IOperadorService {
     }
 
     @Override
-    public ResponseOperadorDto modificar(OperadorDto operadorDto) {
+    public ResponseOperadorDto modificar(OperadorUpdateDto operadorDto) {
         ModelMapper mapper = new ModelMapper();
         Operador operador = mapper.map(operadorDto, Operador.class);
         Operador encontrado = repository.findById(operador.getId())

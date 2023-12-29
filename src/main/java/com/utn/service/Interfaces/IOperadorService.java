@@ -1,6 +1,7 @@
 package com.utn.service.Interfaces;
 
 import com.utn.dto.request.OperadorDto;
+import com.utn.dto.request.OperadorUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseOperadorDto;
 
@@ -11,7 +12,7 @@ public interface IOperadorService {
 
     OperadorDto findOperador(Long id);
 
-    ResponseOperadorDto modificar(OperadorDto operadorDto);
+    ResponseOperadorDto modificar(OperadorUpdateDto operadorDto);
 
     ResponseDto eliminar(Long id);
 

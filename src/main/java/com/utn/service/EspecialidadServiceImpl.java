@@ -2,6 +2,7 @@ package com.utn.service;
 
 import com.utn.dto.request.EspecialidadDto;
 import com.utn.dto.request.EspecialidadFindDto;
+import com.utn.dto.request.EspecialidadUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
@@ -78,7 +79,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     }
 
     @Override
-    public ResponseEspecialidadDto modificar(EspecialidadDto especialidadDto) {
+    public ResponseEspecialidadDto modificar(EspecialidadUpdateDto especialidadDto) {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = mapper.map(especialidadDto, Especialidad.class);
         Especialidad encontrado = repository.findById(esp.getId())

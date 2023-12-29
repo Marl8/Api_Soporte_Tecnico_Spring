@@ -1,6 +1,7 @@
 package com.utn.service.Interfaces;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.dto.response.ResponseClienteDto;
 import com.utn.dto.response.ResponseDto;
 
@@ -11,7 +12,7 @@ public interface IClienteService {
 
     ClienteDto findCliente(Long id);
 
-    ResponseClienteDto modificar(ClienteDto clienteDto);
+    ResponseClienteDto modificar(ClienteUpdateDto clienteDto);
 
     ResponseDto eliminar(Long id);
 }

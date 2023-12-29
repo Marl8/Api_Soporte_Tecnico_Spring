@@ -2,6 +2,7 @@ package com.utn.service.Interfaces;
 
 import com.utn.dto.request.TecnicoDto;
 import com.utn.dto.request.TecnicoFindDto;
+import com.utn.dto.request.TecnicoUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseTecnicoDto;
 
@@ -13,7 +14,7 @@ public interface ITecnicoService {
 
     TecnicoDto findTecnico(Long id);
 
-    ResponseTecnicoDto modificar(TecnicoDto tecnicoDto);
+    ResponseTecnicoDto modificar(TecnicoUpdateDto tecnicoDto);
 
     ResponseDto eliminar(Long id);
 

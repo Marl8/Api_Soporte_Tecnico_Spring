@@ -1,6 +1,7 @@
 package com.utn.service;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.dto.response.ResponseClienteDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.entity.Cliente;
@@ -60,7 +61,7 @@ public class ClienteServiceImpl implements IClienteService {
         Servicio servicio = servicioRepository.findById(idServicio)
                 .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
         cliente.getServicios().add(servicio);
-        ClienteDto clienteResponse = mapper.map(cliente, ClienteDto.class);
+        ClienteUpdateDto clienteResponse = mapper.map(cliente, ClienteUpdateDto.class);
         this.modificar(clienteResponse);
         return new ResponseDto("Asignación realizada con éxito");
     }
@@ -76,7 +77,7 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
-    public ResponseClienteDto modificar(ClienteDto clienteDto) {
+    public ResponseClienteDto modificar(ClienteUpdateDto clienteDto) {
 
         Cliente cliente = mapper.map(clienteDto, Cliente.class);
         Cliente encontrado = repository.findById(cliente.getId()).orElseThrow(
