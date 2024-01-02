@@ -4,12 +4,16 @@ import com.utn.dto.request.EspecialidadDto;
 import com.utn.dto.request.EspecialidadUpdateDto;
 import com.utn.service.Interfaces.IEspecialidadService;
 import com.utn.service.EspecialidadServiceImpl;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/api/especialidad")
+@Validated
 public class EspecialidadController {
 
     IEspecialidadService service;
@@ -19,12 +23,12 @@ public class EspecialidadController {
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody EspecialidadDto especialidadDto){
+    public ResponseEntity<?> guardar(@Valid @RequestBody EspecialidadDto especialidadDto){
         return new ResponseEntity<>(service.guardar(especialidadDto), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findEspecialidadById(@PathVariable Long id) {
+    public ResponseEntity<?> findEspecialidadById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.findEspecialidad(id), HttpStatus.OK);
     }
 
@@ -34,17 +38,18 @@ public class EspecialidadController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@RequestBody EspecialidadUpdateDto especialidadDto) {
+    public ResponseEntity<?> modificar(@Valid @RequestBody EspecialidadUpdateDto especialidadDto) {
         return new ResponseEntity<>(service.modificar(especialidadDto), HttpStatus.OK);
     }
 
     @PutMapping("/asignar/{idEspecialidad}/{idProblema}")
-    public ResponseEntity<?> asignar(@PathVariable Long idEspecialidad, @PathVariable Long idTecnico) {
+    public ResponseEntity<?> asignar(@PathVariable @Positive(message = "Debe ser un número positivo") Long idEspecialidad,
+                                     @Positive(message = "Debe ser un número positivo") @PathVariable Long idTecnico) {
         return new ResponseEntity<>(service.asignarProblema(idEspecialidad, idTecnico), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.eliminar(id), HttpStatus.OK);
     }
 }
