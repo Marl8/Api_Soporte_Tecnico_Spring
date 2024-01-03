@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-public class OperadorNotFoundEception extends RuntimeException {
+public class OperadorNotFoundException extends RuntimeException {
 
     private HttpStatus status;
 
-    public OperadorNotFoundEception(String message, HttpStatus status) {
+    public OperadorNotFoundException(String message, HttpStatus status) {
         super(message);
         this.status = status;
     }

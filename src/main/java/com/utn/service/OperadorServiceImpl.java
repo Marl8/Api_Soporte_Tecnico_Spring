@@ -7,11 +7,15 @@ import com.utn.dto.response.ResponseOperadorDto;
 import com.utn.entity.Incidente;
 import com.utn.entity.Operador;
 import com.utn.entity.Tecnico;
+import com.utn.exception.IncidenteNotFoundException;
+import com.utn.exception.OperadorNotFoundException;
+import com.utn.exception.TecnicoNotFoundException;
 import com.utn.repository.IncidenteRepository;
 import com.utn.repository.OperadorRepository;
 import com.utn.repository.TecnicoRepository;
 import com.utn.service.Interfaces.IOperadorService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +43,7 @@ public class OperadorServiceImpl implements IOperadorService {
         Operador operador = mapper.map(operadorDto, Operador.class);
 
         if(verificarSiExiste(operador)){
-            throw new RuntimeException("El operador ya existe.");
+            throw new OperadorNotFoundException("El operador ya existe.", HttpStatus.NOT_FOUND);
         }
         repository.save(operador);
         OperadorDto response = mapper.map(operador, OperadorDto.class);
@@ -51,7 +55,7 @@ public class OperadorServiceImpl implements IOperadorService {
         ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
-            throw new RuntimeException("No existen operadores con ese id.");
+            throw new OperadorNotFoundException("No existen operadores con ese id.", HttpStatus.NOT_FOUND);
         }
         Operador operador = repository.findById(id).get();
         return mapper.map(operador, OperadorDto.class);
@@ -62,7 +66,7 @@ public class OperadorServiceImpl implements IOperadorService {
         ModelMapper mapper = new ModelMapper();
         Operador operador = mapper.map(operadorDto, Operador.class);
         Operador encontrado = repository.findById(operador.getId())
-                .orElseThrow(() -> new RuntimeException("No se ha encontrado el operador"));
+                .orElseThrow(() -> new OperadorNotFoundException("No existen operadores con ese id.", HttpStatus.NOT_FOUND));
 
         encontrado.setNombre(operador.getNombre());
         encontrado.setApellido(operador.getApellido());
@@ -87,7 +91,7 @@ public class OperadorServiceImpl implements IOperadorService {
     @Override
     public ResponseDto asignarTecnico(Long idIncidente) {
         Incidente incident = incidenteRepository.findById(idIncidente)
-                .orElseThrow(() -> new RuntimeException("Incidente not found"));
+                .orElseThrow(() -> new IncidenteNotFoundException("Incidente not found", HttpStatus.NOT_FOUND));
         List<Operador> listaOperadores = repository.findAll();
         Operador operador;
 
@@ -97,7 +101,7 @@ public class OperadorServiceImpl implements IOperadorService {
             operador = listaOperadores.get(0);
             incident.setOperador(operador);
         }else {
-            throw new RuntimeException("No se han encontrado operadores");
+            throw new OperadorNotFoundException("No se han encontrado operadores", HttpStatus.NOT_FOUND);
         }
 
         // Se le asigna al incidente un técnico de forma aleatoria
@@ -110,7 +114,7 @@ public class OperadorServiceImpl implements IOperadorService {
             tecnico = listaTecnicos.get(0);
             incident.setTecnico(tecnico);
         }else {
-            throw new RuntimeException("No se han encontrado operadores");
+            throw new TecnicoNotFoundException("No se han encontrado técnicos disponibles", HttpStatus.NOT_FOUND);
         }
         incident.modificarEstado();
         incidenteRepository.save(incident);
@@ -120,14 +124,14 @@ public class OperadorServiceImpl implements IOperadorService {
     @Override
     public ResponseDto asignarListaTecnico(Long idOperador) {
         Operador operador = repository.findById(idOperador)
-                .orElseThrow(() -> new RuntimeException("Operador Not found"));
+                .orElseThrow(() -> new OperadorNotFoundException("Operador Not found", HttpStatus.NOT_FOUND));
         List<Tecnico> listaTecnicos = tecnicoRepository.findAll();
         Set<Tecnico> result = new HashSet<>(listaTecnicos);
         if(!listaTecnicos.isEmpty()){
             operador.setListaTecnicos(result);
             repository.save(operador);
         }else{
-            throw new RuntimeException("No se han encontrado operadores");
+            throw new TecnicoNotFoundException("No se han encontrado técnicos", HttpStatus.NOT_FOUND);
         }
         return new ResponseDto("Se ha asignado con éxito la lista de técnicos");
     }

@@ -8,12 +8,17 @@ import com.utn.entity.Cliente;
 import com.utn.entity.Incidente;
 import com.utn.entity.Servicio;
 import com.utn.entity.TipoProblema;
+import com.utn.exception.ClienteNotFoundException;
+import com.utn.exception.IncidenteNotFoundException;
+import com.utn.exception.ProblemaNotFoundException;
+import com.utn.exception.ServicioNotFoundException;
 import com.utn.repository.ClienteRepository;
 import com.utn.repository.IncidenteRepository;
 import com.utn.repository.ProblemaRepository;
 import com.utn.repository.ServicioRepository;
 import com.utn.service.Interfaces.IIncidenteService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -49,13 +54,13 @@ public class IncidenteServiceImpl implements IIncidenteService {
             throw new RuntimeException("El servicio ya existe.");
         }
         Cliente cliente = clienteRepository.findById(incidenteDto.getIdCliente()).orElseThrow(
-                () -> new RuntimeException("Cliente not found"));
+                () -> new ClienteNotFoundException("Cliente not found", HttpStatus.NOT_FOUND));
         Servicio servicio = servicioRepository.findById(incidenteDto.getIdServicio()).orElseThrow(
-                () -> new RuntimeException("Service not found"));
+                () -> new ServicioNotFoundException("Service not found", HttpStatus.NOT_FOUND));
         Set<TipoProblema> problemas = new HashSet<>();
         incidenteDto.getListaProblemas().forEach(p -> {
             TipoProblema problema = problemaRepository.findById(p).orElseThrow(
-                    () -> new RuntimeException("Problema Not found"));
+                    () -> new ProblemaNotFoundException("Problema Not found", HttpStatus.NOT_FOUND));
             problemas.add(problema);
             });
         incidente.setCliente(cliente);
@@ -72,7 +77,7 @@ public class IncidenteServiceImpl implements IIncidenteService {
     @Override
     public ResponseDto asignarHorasColchon(Long idIncidente, int horas){
         Incidente incidente = repository.findById(idIncidente)
-                .orElseThrow(() -> new RuntimeException("Incidente Not found"));
+                .orElseThrow(() -> new IncidenteNotFoundException("Incidente Not found", HttpStatus.NOT_FOUND));
         incidente.setHoraColchon(horas);
         int nuevoTiempoEstimado = incidente.getTiempoResolucion() + horas;
         incidente.setTiempoResolucion(nuevoTiempoEstimado);
@@ -86,7 +91,7 @@ public class IncidenteServiceImpl implements IIncidenteService {
         ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
-            throw new RuntimeException("No existen incidentes con ese id.");
+            throw new IncidenteNotFoundException("No existen incidentes con ese id.", HttpStatus.NOT_FOUND);
         }
         Incidente incidente = repository.findById(id).get();
         return mapper.map(incidente, IncidenteDto.class);
@@ -97,7 +102,7 @@ public class IncidenteServiceImpl implements IIncidenteService {
         ModelMapper mapper = new ModelMapper();
         Incidente incidente = mapper.map(incidenteDto, Incidente.class);
         Incidente encontrado = repository.findById(incidente.getId())
-                .orElseThrow(() -> new RuntimeException("No existen incidentes con este id"));
+                .orElseThrow(() -> new IncidenteNotFoundException("No existen incidentes con ese id.", HttpStatus.NOT_FOUND));
 
         encontrado.setCliente(incidente.getCliente());
         encontrado.setDescripcion(incidente.getDescripcion());

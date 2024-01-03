@@ -6,11 +6,14 @@ import com.utn.dto.response.ResponseClienteDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.entity.Cliente;
 import com.utn.entity.Servicio;
+import com.utn.exception.ClienteNotFoundException;
+import com.utn.exception.ServicioNotFoundException;
 import com.utn.repository.ClienteRepository;
 import com.utn.repository.ServicioRepository;
 import com.utn.service.Interfaces.IClienteService;
 import com.utn.utils.ClienteMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +39,7 @@ public class ClienteServiceImpl implements IClienteService {
 
         Optional<Cliente> existe = repository.findClienteByCuit(clienteDto.getCuit());
         if (existe.isPresent()){
-            throw new RuntimeException("El cliente ya existe.");
+            throw new ClienteNotFoundException("El cliente ya existe.", HttpStatus.BAD_REQUEST);
         }
         Cliente cliente = ClienteMapper.clienteSaveMapper(clienteDto);
 
@@ -44,7 +47,7 @@ public class ClienteServiceImpl implements IClienteService {
         Set<Servicio> servicios = new HashSet<>();
         clienteDto.getServiciosId().forEach(serv -> {
             Servicio servicio = servicioRepository.findById(serv).orElseThrow(
-                    () -> new RuntimeException("Servicio inexistente"));
+                    () -> new ServicioNotFoundException("Servicio inexistente", HttpStatus.NOT_FOUND));
             servicios.add(servicio);
         });
         cliente.setServicios(servicios);
@@ -57,9 +60,9 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     public ResponseDto asignarServicioACliente(Long idCliente, Long idServicio) {
         Cliente cliente = repository.findById(idCliente)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente no encontrado", HttpStatus.NOT_FOUND));
         Servicio servicio = servicioRepository.findById(idServicio)
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+                .orElseThrow(() -> new ServicioNotFoundException("Servicio no encontrado", HttpStatus.NOT_FOUND));
         cliente.getServicios().add(servicio);
         ClienteUpdateDto clienteResponse = mapper.map(cliente, ClienteUpdateDto.class);
         this.modificar(clienteResponse);
@@ -70,7 +73,7 @@ public class ClienteServiceImpl implements IClienteService {
     public ClienteDto findCliente(Long id) {
 
         if(!repository.existsById(id)){
-            throw new RuntimeException("No existen cliente con ese id.");
+            throw new ClienteNotFoundException("No existen cliente con ese id.", HttpStatus.NOT_FOUND);
         }
         Cliente cliente = repository.findById(id).get();
         return mapper.map(cliente, ClienteDto.class);
@@ -81,7 +84,7 @@ public class ClienteServiceImpl implements IClienteService {
 
         Cliente cliente = mapper.map(clienteDto, Cliente.class);
         Cliente encontrado = repository.findById(cliente.getId()).orElseThrow(
-                () -> new RuntimeException("Cliente inexistente"));
+                () -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND));
         encontrado.setNombre(cliente.getNombre());
         encontrado.setApellido(cliente.getApellido());
         encontrado.setRazonSocial(cliente.getRazonSocial());

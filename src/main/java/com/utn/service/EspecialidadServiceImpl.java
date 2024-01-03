@@ -7,11 +7,15 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
 import com.utn.entity.TipoProblema;
+import com.utn.exception.EspecialidadNotFoundException;
+import com.utn.exception.ProblemaNotFoundException;
+import com.utn.exception.TecnicoNotFoundException;
 import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.ProblemaRepository;
 import com.utn.service.Interfaces.IEspecialidadService;
 import com.utn.utils.EspecialidadMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -38,12 +42,12 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
         Especialidad especialidad = EspecialidadMapper.especialidadSaveMapper(especialidadDto);
 
         if(verificarSiExiste(especialidad)){
-            throw new RuntimeException("La especialidad ya existe.");
+            throw new EspecialidadNotFoundException("La especialidad ya existe.", HttpStatus.BAD_REQUEST);
         }
         Set<TipoProblema> problemas = new HashSet<>();
         especialidadDto.getListaProblemas().forEach(p -> {
             TipoProblema problema = problemaRepository.findById(p).orElseThrow(
-                    () -> new RuntimeException("No existen problemas con este id."));
+                    () -> new ProblemaNotFoundException("No existen problemas con este id.", HttpStatus.NOT_FOUND));
             problemas.add(problema);
         });
         especialidad.setListaProblemas(problemas);
@@ -55,9 +59,9 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     @Override
     public ResponseDto asignarProblema(Long idEspecialidad, Long idProblema) {
         Especialidad esp = repository.findById(idEspecialidad)
-                .orElseThrow(() -> new RuntimeException("Técnico no encontrado"));
+                .orElseThrow(() -> new TecnicoNotFoundException("Técnico no encontrado", HttpStatus.NOT_FOUND));
         TipoProblema problema = problemaRepository.findById(idProblema)
-                .orElseThrow(() -> new RuntimeException("Técnico no encontrado"));
+                .orElseThrow(() -> new ProblemaNotFoundException("Problema no encontrado", HttpStatus.NOT_FOUND));
         esp.getListaProblemas().add(problema);
         repository.save(esp);
         return new ResponseDto("Asignación realizada con éxito");
@@ -67,7 +71,7 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
     public EspecialidadFindDto findEspecialidad(Long id) {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = repository.findById(id).orElseThrow(
-                () -> new RuntimeException("No existen especialidades con este id."));
+                () -> new EspecialidadNotFoundException("No existen especialidades con este id.", HttpStatus.NOT_FOUND));
         return mapper.map(esp, EspecialidadFindDto.class);
     }
 
@@ -83,14 +87,14 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = mapper.map(especialidadDto, Especialidad.class);
         Especialidad encontrado = repository.findById(esp.getId())
-                .orElseThrow(() -> new RuntimeException("Especialidad inexistente."));
+                .orElseThrow(() -> new EspecialidadNotFoundException("Especialidad inexistente.", HttpStatus.NOT_FOUND));
 
-            encontrado.setNombre(esp.getNombre());
-            encontrado.setDescripcion(esp.getDescripcion());
-            encontrado.setListaTecnicos(esp.getListaTecnicos());
-            encontrado.setListaProblemas(esp.getListaProblemas());
+        encontrado.setNombre(esp.getNombre());
+        encontrado.setDescripcion(esp.getDescripcion());
+        encontrado.setListaTecnicos(esp.getListaTecnicos());
+        encontrado.setListaProblemas(esp.getListaProblemas());
 
-            Especialidad especialidad = repository.save(encontrado);
+        Especialidad especialidad = repository.save(encontrado);
         EspecialidadDto respuesta = mapper.map(especialidad, EspecialidadDto.class);
         return new ResponseEspecialidadDto(respuesta, "Servicio modificado con éxito");
     }

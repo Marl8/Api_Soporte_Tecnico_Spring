@@ -5,11 +5,13 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseServicioDto;
 import com.utn.entity.Cliente;
 import com.utn.entity.Servicio;
+import com.utn.exception.ServicioNotFoundException;
 import com.utn.repository.ClienteRepository;
 import com.utn.repository.ServicioRepository;
 import com.utn.service.Interfaces.IServicioService;
 import com.utn.utils.ServicioMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
@@ -35,7 +37,7 @@ public class ServicioServiceImpl implements IServicioService {
         Servicio servicio = ServicioMapper.servicioSaveMapper(servicioDto);
 
         if(verificarSiExiste(servicio)){
-            throw new RuntimeException("El servicio ya existe.");
+            throw new ServicioNotFoundException("El servicio ya existe.", HttpStatus.BAD_REQUEST);
         }
         repository.save(servicio);
         ServicioDto response = mapper.map(servicio, ServicioDto.class);
@@ -47,7 +49,7 @@ public class ServicioServiceImpl implements IServicioService {
         ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
-            throw new RuntimeException("No existen servicios con ese id.");
+            throw new ServicioNotFoundException("No existen servicios con ese id.", HttpStatus.NOT_FOUND);
         }
         Servicio servicio = repository.findById(id).get();
         return mapper.map(servicio, ServicioDto.class);
@@ -68,7 +70,7 @@ public class ServicioServiceImpl implements IServicioService {
         ModelMapper mapper = new ModelMapper();
         Servicio servicio = mapper.map(servicioDto, Servicio.class);
         Servicio encontrado = repository.findById(servicio.getId())
-                .orElseThrow(() -> new RuntimeException("No se encontraron servicios con este id"));
+                .orElseThrow(() -> new ServicioNotFoundException("No se encontraron servicios con este id", HttpStatus.NOT_FOUND));
 
         encontrado.setTipoServicio(servicio.getTipoServicio());
         encontrado.setDescripcion(servicio.getDescripcion());

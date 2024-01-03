@@ -17,13 +17,13 @@ public class ExceptionController {
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 
-    @ExceptionHandler(IncidenteNotFoundExcepcion.class)
-    public ResponseEntity<?> clienteNotFoundException(IncidenteNotFoundExcepcion ex){
+    @ExceptionHandler(IncidenteNotFoundException.class)
+    public ResponseEntity<?> clienteNotFoundException(IncidenteNotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 
-    @ExceptionHandler(OperadorNotFoundEception.class)
-    public ResponseEntity<?> operadorNotFoundException(OperadorNotFoundEception ex){
+    @ExceptionHandler(OperadorNotFoundException.class)
+    public ResponseEntity<?> operadorNotFoundException(OperadorNotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 
