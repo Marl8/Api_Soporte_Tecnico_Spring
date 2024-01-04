@@ -1,8 +1,14 @@
 package com.utn.exception;
 
+import com.utn.dto.response.ErrorValidDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.HashMap;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -41,4 +47,20 @@ public class ExceptionController {
     public ResponseEntity<?> problemaNotFoundException(ProblemaNotFoundException ex){
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> fallaValidacion(MethodArgumentTypeMismatchException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> fallanVariasValidaciones(MethodArgumentNotValidException ex){
+
+        HashMap<String, String> errores = new HashMap<>();
+        ex.getFieldErrors()
+                .forEach(field -> errores.put(field.getField(), field.getDefaultMessage()));
+
+        return new ResponseEntity<>(new ErrorValidDto(400, errores), HttpStatus.BAD_REQUEST);
+    }
+
 }

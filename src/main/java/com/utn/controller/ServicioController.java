@@ -23,7 +23,7 @@ public class ServicioController {
 
     @PostMapping
     public ResponseEntity<?> guardar(@Valid @RequestBody ServicioDto servicioDto){
-        return new ResponseEntity<>(service.guardarServicio(servicioDto), HttpStatus.OK);
+        return new ResponseEntity<>(service.guardarServicio(servicioDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

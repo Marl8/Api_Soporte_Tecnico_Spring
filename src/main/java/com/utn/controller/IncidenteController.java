@@ -24,7 +24,7 @@ public class IncidenteController {
 
     @PostMapping
     public ResponseEntity<?> guardar(@Valid @RequestBody IncidenteDto incidenteDto){
-        return new ResponseEntity<>(service.guardar(incidenteDto), HttpStatus.OK);
+        return new ResponseEntity<>(service.guardar(incidenteDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/asignarHoras/{idIncidente}/{horas}")

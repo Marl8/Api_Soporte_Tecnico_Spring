@@ -24,7 +24,7 @@ public class EspecialidadController {
 
     @PostMapping
     public ResponseEntity<?> guardar(@Valid @RequestBody EspecialidadDto especialidadDto){
-        return new ResponseEntity<>(service.guardar(especialidadDto), HttpStatus.OK);
+        return new ResponseEntity<>(service.guardar(especialidadDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
