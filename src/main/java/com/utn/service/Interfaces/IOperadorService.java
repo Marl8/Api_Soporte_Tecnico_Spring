@@ -20,4 +20,6 @@ public interface IOperadorService {
 
     ResponseDto asignarListaTecnico(Long idOperador);
 
+    ResponseDto asignarHorasColchon(Long idIncidente, int horas);
+
 }

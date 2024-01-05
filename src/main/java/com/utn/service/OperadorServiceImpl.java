@@ -87,6 +87,12 @@ public class OperadorServiceImpl implements IOperadorService {
         return new ResponseDto("Operador eliminado con éxito");
     }
 
+    /**
+     * Método para asignarle un técnico al incidente.
+     * En primer lugar, se le asigna un operador de forma aleatoria y este es el encargado
+     * de asignar un técnico de la lista de técnicos disponibles.
+     * @param idIncidente Id del incidente
+     * */
     @Transactional
     @Override
     public ResponseDto asignarTecnico(Long idIncidente) {
@@ -121,6 +127,26 @@ public class OperadorServiceImpl implements IOperadorService {
         return new ResponseDto("Se ha asignado el técnico con éxito");
     }
 
+    /*
+    * Se Agrega la funcionalidad para ampliar el plazo de resolución si la problemática
+    * asociada al incidente es compleja.
+    **/
+    @Override
+    public ResponseDto asignarHorasColchon(Long idIncidente, int horas){
+        Incidente incidente = incidenteRepository.findById(idIncidente)
+                .orElseThrow(() -> new IncidenteNotFoundException("Incidente Not found", HttpStatus.NOT_FOUND));
+        incidente.setEsComplejo(true);
+        incidente.setHoraColchon(horas);
+        int nuevoTiempoEstimado = incidente.getTiempoResolucion() + horas;
+        incidente.setTiempoResolucion(nuevoTiempoEstimado);
+        incidenteRepository.save(incidente);
+
+        return new ResponseDto("Tiempo de resolución ampliado con éxito");
+    }
+
+    /**
+     * Método para asignarle a un nuevo Operador la lista de técnicos existentes.
+     * */
     @Override
     public ResponseDto asignarListaTecnico(Long idOperador) {
         Operador operador = repository.findById(idOperador)

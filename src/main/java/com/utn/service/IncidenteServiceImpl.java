@@ -75,18 +75,6 @@ public class IncidenteServiceImpl implements IIncidenteService {
     }
 
     @Override
-    public ResponseDto asignarHorasColchon(Long idIncidente, int horas){
-        Incidente incidente = repository.findById(idIncidente)
-                .orElseThrow(() -> new IncidenteNotFoundException("Incidente Not found", HttpStatus.NOT_FOUND));
-        incidente.setHoraColchon(horas);
-        int nuevoTiempoEstimado = incidente.getTiempoResolucion() + horas;
-        incidente.setTiempoResolucion(nuevoTiempoEstimado);
-        repository.save(incidente);
-        return new ResponseDto("Tiempo de resolución ampliado con éxito");
-    }
-
-
-    @Override
     public IncidenteDto findIncidente(Long id) {
         ModelMapper mapper = new ModelMapper();
 

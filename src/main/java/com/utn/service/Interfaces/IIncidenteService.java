@@ -8,7 +8,6 @@ import com.utn.dto.response.ResponseIncidenteDto;
 public interface IIncidenteService {
 
     ResponseIncidenteDto guardar(IncidenteDto incidenteDto);
-    ResponseDto asignarHorasColchon(Long idIncidente, int horas);
     IncidenteDto findIncidente(Long id);
 
     ResponseIncidenteDto modificar(IncidenteUpdateDto incidenteDto);

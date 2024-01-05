@@ -42,6 +42,14 @@ public class OperadorController {
         return new ResponseEntity<>(service.asignarListaTecnico(idOperador), HttpStatus.OK);
     }
 
+    @PutMapping("/asignarHoras/{idIncidente}/{horas}")
+    public ResponseEntity<?> asignarHorasColchon(
+            @PathVariable @Positive(message = "Debe ser un número positivo") Long idIncidente,
+            @Positive(message = "Debe ser un número positivo") @PathVariable int horas){
+        return new ResponseEntity<>(service.asignarHorasColchon(idIncidente, horas), HttpStatus.OK);
+    }
+
+
     @PutMapping("/asignarTecnico/{idIncidente}")
     public ResponseEntity<?> asignarTecnicoAIncidente(@PathVariable @Positive(message = "Debe ser un número positivo") Long idIncidente) {
         return new ResponseEntity<>(service.asignarTecnico(idIncidente), HttpStatus.OK);

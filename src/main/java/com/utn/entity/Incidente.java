@@ -29,9 +29,11 @@ public class Incidente {
     @Column(name = "tiempo_resolucion")
     private int tiempoResolucion;
     @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
+    private LocalDateTime fechaCreacion;
     @Column(name = "fecha_cierre")
     private LocalDateTime fechaCierre;
+    @Column(name = "problema_complejo")
+    private boolean esComplejo;
     @Column(name = "hora_colchon")
     private int horaColchon;
 

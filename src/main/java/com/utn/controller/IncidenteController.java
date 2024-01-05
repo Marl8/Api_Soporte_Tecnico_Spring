@@ -27,13 +27,6 @@ public class IncidenteController {
         return new ResponseEntity<>(service.guardar(incidenteDto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/asignarHoras/{idIncidente}/{horas}")
-    public ResponseEntity<?> asignarHorasColchon(
-            @PathVariable @Positive(message = "Debe ser un número positivo") Long idIncidente,
-            @Positive(message = "Debe ser un número positivo") @PathVariable int horas){
-        return new ResponseEntity<>(service.asignarHorasColchon(idIncidente, horas), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> findTecnicoById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.findIncidente(id), HttpStatus.OK);
