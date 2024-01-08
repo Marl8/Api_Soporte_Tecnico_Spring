@@ -52,4 +52,9 @@ public class TecnicoController {
     public ResponseEntity<?> delete(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.eliminar(id), HttpStatus.OK);
     }
+
+    @GetMapping("/incidentesResueltos/{dias}")
+    public ResponseEntity<?> findTecnicoMasResueltos(@PathVariable @Positive(message = "Debe ser un número positivo") long dias) {
+        return new ResponseEntity<>(service.tecnicoConMasResueltos(dias), HttpStatus.OK);
+    }
 }

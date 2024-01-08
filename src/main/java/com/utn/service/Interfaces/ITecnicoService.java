@@ -21,4 +21,7 @@ public interface ITecnicoService {
     Set<TecnicoFindDto> findAll();
 
     ResponseDto asignarEspecialidadATecnico(Long idEspecialidad, Long idTecnico);
+
+
+    ResponseTecnicoDto tecnicoConMasResueltos(long dias);
 }

@@ -5,11 +5,14 @@ import com.utn.dto.request.TecnicoFindDto;
 import com.utn.dto.request.TecnicoUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseTecnicoDto;
+import com.utn.entity.EEstado;
 import com.utn.entity.Especialidad;
+import com.utn.entity.Incidente;
 import com.utn.entity.Tecnico;
 import com.utn.exception.EspecialidadNotFoundException;
 import com.utn.exception.TecnicoNotFoundException;
 import com.utn.repository.EspecialidadRepository;
+import com.utn.repository.IncidenteRepository;
 import com.utn.repository.TecnicoRepository;
 import com.utn.service.Interfaces.ITecnicoService;
 import com.utn.utils.TecnicoMapper;
@@ -18,10 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,9 +32,13 @@ public class TecnicoServiceImpl implements ITecnicoService {
 
     EspecialidadRepository especialidadRepository;
 
-    public TecnicoServiceImpl(TecnicoRepository repository, EspecialidadRepository esp) {
+    IncidenteRepository incidenteRepository;
+
+    public TecnicoServiceImpl(TecnicoRepository repository, EspecialidadRepository esp,
+                              IncidenteRepository inc) {
         this.repository = repository;
         this.especialidadRepository = esp;
+        this.incidenteRepository = inc;
     }
 
     @Override
@@ -117,5 +122,31 @@ public class TecnicoServiceImpl implements ITecnicoService {
             repository.deleteById(id);
         }
         return new ResponseDto("Técnico eliminado con éxito");
+    }
+
+    @Override
+    public ResponseTecnicoDto tecnicoConMasResueltos(long dias){
+        /*
+        * Obtengo la fecha de búsqueda (los últimos N días) restado a la fecha actual
+        * la cantidad de días que se desea retroceder en la búsqueda.
+        *
+        * https://parzibyte.me/blog/2018/10/16/sumar-restar-fechas-java/
+        **/
+        LocalDate fechaBusqueda = LocalDate.now().minusDays(dias);
+
+        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fechaBusqueda, EEstado.RESUELTO);
+
+        // Recorro la lista de incidentes y agrupo por cantidad de incidentes resueltos por cada técnico
+        Map<Tecnico, Long> resueltos = incidentes.stream()
+                .collect(Collectors.groupingBy(Incidente::getTecnico, Collectors.counting()));
+
+        // Obtengo el técnico con más incidentes resueltos
+        Tecnico tecnicoConMasIncidentes = resueltos.entrySet().stream()
+                .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
+
+        ModelMapper mapper = new ModelMapper();
+        TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
+        return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos es: "
+                + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 }
