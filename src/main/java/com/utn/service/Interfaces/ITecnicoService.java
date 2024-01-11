@@ -22,8 +22,9 @@ public interface ITecnicoService {
 
     ResponseDto asignarEspecialidadATecnico(Long idEspecialidad, Long idTecnico);
 
-
     ResponseTecnicoDto tecnicoConMasResueltos(long dias);
 
     ResponseTecnicoDto tecnicoEspecialidadMasResueltos(long dias, String especialidad);
+
+    ResponseTecnicoDto tecnicoMasRapido();
 }

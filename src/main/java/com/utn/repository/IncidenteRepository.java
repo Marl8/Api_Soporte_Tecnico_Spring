@@ -17,4 +17,5 @@ public interface IncidenteRepository extends JpaRepository<Incidente, Long> {
     @Query("SELECT i FROM Incidente i WHERE i.fechaCierre >= ?1 AND i.estado = ?2")
     List<Incidente> findIncidenteByEstadoAndFecha(LocalDate fechaBusqueda, EEstado estado);
 
+    List<Incidente> findIncidenteByEstado(EEstado estado);
 }

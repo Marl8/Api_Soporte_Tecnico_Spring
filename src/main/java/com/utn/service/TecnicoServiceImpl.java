@@ -22,7 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -160,6 +162,7 @@ public class TecnicoServiceImpl implements ITecnicoService {
         List<Incidente> incidentesPorEspecialidad = new ArrayList<>();
         Tecnico tecnicoConMasIncidentes;
 
+        // Filtro los incidentes resueltos de acuerdo a la especialidad requerida
         for(Incidente incidente : incidentes){
             for(Especialidad esp : incidente.getTecnico().getListaEspecialidades()){
                 if(esp.getNombre().equals(especialidad)){
@@ -183,5 +186,37 @@ public class TecnicoServiceImpl implements ITecnicoService {
         TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
         return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos de la especialidad " +
                 especialidad + " es: " + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
+    }
+
+    @Override
+    public ResponseTecnicoDto tecnicoMasRapido(){
+        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstado(EEstado.RESUELTO);
+
+        LocalDateTime fechaInicial;
+        LocalDateTime fechaResolucion;
+        Map<Incidente, Long> incidentesMap = new HashMap<>();
+
+        // Recorro la lista de incidentes convierto las fechas de creación y de cierre en cantidad de horas y las guardo en un MAP
+        for(Incidente incidente : incidentes){
+            fechaInicial = incidente.getFechaCreacion();
+            fechaResolucion = incidente.getFechaCierre();
+            Duration duration = Duration.between(fechaInicial, fechaResolucion);
+
+            incidentesMap.put(incidente, duration.toHours());
+        }
+
+        // Compara las horas que tardo en resolverse cada incidente y obtiene el incidente con menos horas de resolución
+        Incidente incidenteMasRapido = incidentesMap.entrySet().stream()
+                .min(Map.Entry.comparingByValue()).map(Map.Entry::getKey)
+                .orElseThrow( () -> new IncidenteNotFoundException("No se ha podido completar la operación",
+                        HttpStatus.INTERNAL_SERVER_ERROR));
+
+        // Incidente obtengo el técnico asociado que fue el técnico más rápido
+        Tecnico tecnicoMasRapido = incidenteMasRapido.getTecnico();
+
+        ModelMapper mapper = new ModelMapper();
+        TecnicoDto dto = mapper.map(tecnicoMasRapido, TecnicoDto.class);
+        return new ResponseTecnicoDto(dto, "El técnico que más rápido resolvió un incidente" +
+                "fue: " + tecnicoMasRapido.getNombre() + " " + dto.getApellido());
     }
 }

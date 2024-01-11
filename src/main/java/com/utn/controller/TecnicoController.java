@@ -65,4 +65,9 @@ public class TecnicoController {
             @PathVariable @NotBlank(message = "Debe indicarse una especialidad") String especialidad) {
         return new ResponseEntity<>(service.tecnicoEspecialidadMasResueltos(dias, especialidad), HttpStatus.OK);
     }
+
+    @GetMapping("/tecnicoMasRapido")
+    public ResponseEntity<?> tecnicoMasRapido(){
+        return  new ResponseEntity<>(service.tecnicoMasRapido(), HttpStatus.OK);
+    }
 }
