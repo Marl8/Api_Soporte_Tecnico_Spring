@@ -10,6 +10,7 @@ import com.utn.entity.Especialidad;
 import com.utn.entity.Incidente;
 import com.utn.entity.Tecnico;
 import com.utn.exception.EspecialidadNotFoundException;
+import com.utn.exception.IncidenteNotFoundException;
 import com.utn.exception.TecnicoNotFoundException;
 import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.IncidenteRepository;
@@ -148,5 +149,39 @@ public class TecnicoServiceImpl implements ITecnicoService {
         TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
         return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos es: "
                 + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
+    }
+
+    @Override
+    public ResponseTecnicoDto tecnicoEspecialidadMasResueltos(long dias, String especialidad) {
+
+        LocalDate fechaBusqueda = LocalDate.now().minusDays(dias);
+
+        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fechaBusqueda, EEstado.RESUELTO);
+        List<Incidente> incidentesPorEspecialidad = new ArrayList<>();
+        Tecnico tecnicoConMasIncidentes;
+
+        for(Incidente incidente : incidentes){
+            for(Especialidad esp : incidente.getTecnico().getListaEspecialidades()){
+                if(esp.getNombre().equals(especialidad)){
+                    incidentesPorEspecialidad.add(incidente);
+                }
+            }
+        }
+        if(!incidentesPorEspecialidad.isEmpty()) {
+            // Recorro la lista de incidentes y agrupo por cantidad de incidentes resueltos por cada técnico
+            Map<Tecnico, Long> resueltos = incidentesPorEspecialidad.stream()
+                    .collect(Collectors.groupingBy(Incidente::getTecnico, Collectors.counting()));
+
+            // Obtengo el técnico con más incidentes resueltos
+            tecnicoConMasIncidentes = resueltos.entrySet().stream()
+                    .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
+        }else{
+            throw new IncidenteNotFoundException("No se encontraron incidentes resueltos la especialidad: " + especialidad,
+                    HttpStatus.BAD_REQUEST);
+        }
+        ModelMapper mapper = new ModelMapper();
+        TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
+        return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos de la especialidad " +
+                especialidad + " es: " + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 }

@@ -5,6 +5,7 @@ import com.utn.dto.request.TecnicoUpdateDto;
 import com.utn.service.Interfaces.ITecnicoService;
 import com.utn.service.TecnicoServiceImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +57,12 @@ public class TecnicoController {
     @GetMapping("/incidentesResueltos/{dias}")
     public ResponseEntity<?> findTecnicoMasResueltos(@PathVariable @Positive(message = "Debe ser un número positivo") long dias) {
         return new ResponseEntity<>(service.tecnicoConMasResueltos(dias), HttpStatus.OK);
+    }
+
+    @GetMapping("/PorEspecialidadResueltos/{dias}")
+    public ResponseEntity<?> findTecnicoEspecialidadMasResueltos(
+            @PathVariable @Positive(message = "Debe ser un número positivo") long dias,
+            @PathVariable @NotBlank(message = "Debe indicarse una especialidad") String especialidad) {
+        return new ResponseEntity<>(service.tecnicoEspecialidadMasResueltos(dias, especialidad), HttpStatus.OK);
     }
 }

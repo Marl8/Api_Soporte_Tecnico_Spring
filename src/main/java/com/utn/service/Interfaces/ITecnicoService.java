@@ -24,4 +24,6 @@ public interface ITecnicoService {
 
 
     ResponseTecnicoDto tecnicoConMasResueltos(long dias);
+
+    ResponseTecnicoDto tecnicoEspecialidadMasResueltos(long dias, String especialidad);
 }
