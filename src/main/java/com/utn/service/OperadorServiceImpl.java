@@ -4,12 +4,11 @@ import com.utn.dto.request.OperadorDto;
 import com.utn.dto.request.OperadorUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseOperadorDto;
-import com.utn.entity.Incidente;
-import com.utn.entity.Operador;
-import com.utn.entity.Tecnico;
+import com.utn.entity.*;
 import com.utn.exception.IncidenteNotFoundException;
 import com.utn.exception.OperadorNotFoundException;
 import com.utn.exception.TecnicoNotFoundException;
+import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.IncidenteRepository;
 import com.utn.repository.OperadorRepository;
 import com.utn.repository.TecnicoRepository;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OperadorServiceImpl implements IOperadorService {
@@ -30,11 +30,14 @@ public class OperadorServiceImpl implements IOperadorService {
 
     TecnicoRepository tecnicoRepository;
 
+    EspecialidadRepository especialidadRepository;
+
     public OperadorServiceImpl(OperadorRepository repository, IncidenteRepository incidenteRepository
-    ,TecnicoRepository tecnicoRepository) {
+    ,TecnicoRepository tecnicoRepository, EspecialidadRepository especialidadRepository) {
         this.repository = repository;
         this.incidenteRepository = incidenteRepository;
         this.tecnicoRepository = tecnicoRepository;
+        this.especialidadRepository = especialidadRepository;
     }
 
     @Override
@@ -110,14 +113,15 @@ public class OperadorServiceImpl implements IOperadorService {
             throw new OperadorNotFoundException("No se han encontrado operadores", HttpStatus.NOT_FOUND);
         }
 
-        // Se le asigna al incidente un técnico de forma aleatoria
-        List<Tecnico> listaTecnicos = tecnicoRepository.findAll();
-        List<Tecnico> tecnicosDisponibles = new ArrayList<>(listaTecnicos.stream()
+        // Se le asigna al incidente un técnico de forma aleatoria según el tipo de problema
+        List<Tecnico> listTecnicosEspIncidente = tecnicosEspecialidadesIncidente(incident);
+
+        List<Tecnico> tecnicosDisponibles = new ArrayList<>(listTecnicosEspIncidente.stream()
                 .filter(Tecnico::isDisponibilidad).toList());
         Tecnico tecnico;
         if (!tecnicosDisponibles.isEmpty()) {
             Collections.shuffle(tecnicosDisponibles);
-            tecnico = listaTecnicos.get(0);
+            tecnico = tecnicosDisponibles.get(0);
             incident.setTecnico(tecnico);
         }else {
             throw new TecnicoNotFoundException("No se han encontrado técnicos disponibles", HttpStatus.NOT_FOUND);
@@ -125,6 +129,32 @@ public class OperadorServiceImpl implements IOperadorService {
         incident.modificarEstado();
         incidenteRepository.save(incident);
         return new ResponseDto("Se ha asignado el técnico con éxito");
+    }
+
+    /**
+     * Método que genera la lista de técnicos según la especialidad requerida por el
+     * incidente de acuerdo a los tipos de problemas asociados.
+     * @param incident Recibe como parámetro el incidente
+     * */
+    private List<Tecnico> tecnicosEspecialidadesIncidente(Incidente incident) {
+        List<Especialidad> listaEspecialidadesIncidente = new ArrayList<>();
+
+        // Se genera la lista de las especialidades requeridas según los tipos de problemas reportados en el incidente.
+        incident.getListaProblemas().forEach(p -> listaEspecialidadesIncidente.add(p.getEspecialidad()));
+
+        List<Tecnico> listaTecnicos = tecnicoRepository.findAll();
+        List<Tecnico> listaEspecialidad;
+
+       // Se genera una lista con los técnicos que tengan dichas especialidades.
+        if(!listaTecnicos.isEmpty()) {
+            listaEspecialidad = listaTecnicos.stream()
+                        .filter(tecnico -> tecnico.getListaEspecialidades().stream()
+                                .anyMatch(listaEspecialidadesIncidente::contains))
+                        .collect(Collectors.toList());
+        }else {
+            throw new TecnicoNotFoundException("Not found técnicos", HttpStatus.BAD_REQUEST);
+        }
+        return listaEspecialidad;
     }
 
     /*
