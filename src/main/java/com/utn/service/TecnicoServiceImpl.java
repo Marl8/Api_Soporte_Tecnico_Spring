@@ -127,6 +127,10 @@ public class TecnicoServiceImpl implements ITecnicoService {
         return new ResponseDto("Técnico eliminado con éxito");
     }
 
+    /**
+     * Método pra encontrar al técnico que más incidentes resolvió en los últimos N días.
+     * @param dias El rango de los últimos días para realizar la búsqueda
+     * */
     @Override
     public ResponseTecnicoDto tecnicoConMasResueltos(long dias){
         /*
@@ -153,6 +157,12 @@ public class TecnicoServiceImpl implements ITecnicoService {
                 + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 
+    /**
+     * Método pra encontrar al técnico que más incidentes resolvió en los últimos N días,
+     * filtrando por especialidad.
+     * @param dias El rango de los últimos días para realizar la búsqueda
+     * @param especialidad La especialidad por la que se desea filtrar.
+     * */
     @Override
     public ResponseTecnicoDto tecnicoEspecialidadMasResueltos(long dias, String especialidad) {
 
@@ -188,6 +198,9 @@ public class TecnicoServiceImpl implements ITecnicoService {
                 especialidad + " es: " + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 
+    /**
+     * Método pra encontrar al técnico que más rápido resolvió un incidente.
+     * */
     @Override
     public ResponseTecnicoDto tecnicoMasRapido(){
         List<Incidente> incidentes = incidenteRepository.findIncidenteByEstado(EEstado.RESUELTO);
