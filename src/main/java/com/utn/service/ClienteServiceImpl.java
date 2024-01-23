@@ -71,11 +71,8 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public ClienteDto findCliente(Long id) {
-
-        if(!repository.existsById(id)){
-            throw new ClienteNotFoundException("No existen cliente con ese id.", HttpStatus.NOT_FOUND);
-        }
-        Cliente cliente = repository.findById(id).get();
+        Cliente cliente = repository.findById(id).orElseThrow(
+                () -> new ClienteNotFoundException("No existen cliente con ese id.", HttpStatus.NOT_FOUND));
         return mapper.map(cliente, ClienteDto.class);
     }
 
