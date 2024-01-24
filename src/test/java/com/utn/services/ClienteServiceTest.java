@@ -1,6 +1,7 @@
 package com.utn.services;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.dto.response.ResponseClienteDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.entity.Cliente;
@@ -90,15 +91,46 @@ public class ClienteServiceTest {
     @Test
     @DisplayName("test para obtener un cliente por id")
     void buscarClientePorId(){
-        Long id1 = 1L;
+        Long id = 1L;
         Cliente cliente = ClienteObjectUtils.cliente();
         ClienteDto expected = ClienteObjectUtils.clienteDto();
 
         when(repository.findById(any())).thenReturn(Optional.of(cliente));
 
-        ClienteDto actual = clienteService.findCliente(id1);
+        ClienteDto actual = clienteService.findCliente(id);
 
         assertEquals(expected.getRazonSocial(), actual.getRazonSocial());
         assertEquals(expected.getCuit(), actual.getCuit());
+    }
+
+    @Test
+    @DisplayName("test OK para  modificar cliente")
+    void modificarClienteTestOk(){
+        Cliente cliente = ClienteObjectUtils.cliente();
+        Cliente modificado = ClienteObjectUtils.clienteModificado();
+        ClienteUpdateDto argumentoSut = ClienteObjectUtils.clienteUpdateDto();
+        ResponseClienteDto expected = new ResponseClienteDto(modificado.getRazonSocial(),
+                modificado.getCuit(), "Cliente modificado con éxito");
+
+        when(repository.findById(any())).thenReturn(Optional.of(cliente));
+        when(repository.save(any())).thenReturn(modificado);
+
+        ResponseClienteDto actual = clienteService.modificar(argumentoSut);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("test OK para eliminar cliente")
+    void eliminarClienteTestOK(){
+        Long id = 1L;
+        Cliente cliente = ClienteObjectUtils.cliente();
+        ResponseDto expected = new ResponseDto("Cliente eliminado con éxito");
+
+        when(repository.findById(any())).thenReturn(Optional.of(cliente));
+
+        ResponseDto actual = clienteService.eliminar(id);
+
+        assertEquals(expected, actual);
     }
 }

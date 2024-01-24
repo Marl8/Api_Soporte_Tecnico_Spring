@@ -1,6 +1,7 @@
 package com.utn.utils;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.entity.Cliente;
 
 import java.util.HashSet;
@@ -28,5 +29,23 @@ public class ClienteObjectUtils {
         idServicios.add(id);
         clienteDto.setServiciosId(idServicios);
         return clienteDto;
+    }
+
+    public static ClienteUpdateDto clienteUpdateDto(){
+        ClienteUpdateDto clienteDto = new ClienteUpdateDto();
+        clienteDto.setRazonSocial("Suma SA");
+        clienteDto.setCuit("30125869709");
+        clienteDto.setTelefono("01145002981");
+        clienteDto.setCorreoElectronico("suma@Gmail.com");
+        return clienteDto;
+    }
+
+    public static Cliente clienteModificado(){
+        Cliente cliente = new Cliente();
+        cliente.setRazonSocial("Suma SA");
+        cliente.setCuit("30125869709");
+        cliente.setTelefono("01145002981");
+        cliente.setCorreoElectronico("suma@Gmail.com");
+        return cliente;
     }
 }
