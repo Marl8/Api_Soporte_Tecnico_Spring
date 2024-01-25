@@ -44,8 +44,8 @@ public class EspecialidadController {
 
     @PutMapping("/asignar/{idEspecialidad}/{idProblema}")
     public ResponseEntity<?> asignar(@PathVariable @Positive(message = "Debe ser un número positivo") Long idEspecialidad,
-                                     @Positive(message = "Debe ser un número positivo") @PathVariable Long idTecnico) {
-        return new ResponseEntity<>(service.asignarProblema(idEspecialidad, idTecnico), HttpStatus.OK);
+                                     @Positive(message = "Debe ser un número positivo") @PathVariable Long idProblema) {
+        return new ResponseEntity<>(service.asignarProblema(idEspecialidad, idProblema), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -6,9 +6,11 @@ import com.utn.dto.request.EspecialidadUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
+import com.utn.entity.Servicio;
 import com.utn.entity.TipoProblema;
 import com.utn.exception.EspecialidadNotFoundException;
 import com.utn.exception.ProblemaNotFoundException;
+import com.utn.exception.ServicioNotFoundException;
 import com.utn.exception.TecnicoNotFoundException;
 import com.utn.repository.EspecialidadRepository;
 import com.utn.repository.ProblemaRepository;
@@ -26,9 +28,9 @@ import java.util.Set;
 @Service
 public class EspecialidadServiceImpl implements IEspecialidadService {
 
-    private final EspecialidadRepository repository;
+    EspecialidadRepository repository;
 
-    private final ProblemaRepository problemaRepository;
+    ProblemaRepository problemaRepository;
 
 
     public EspecialidadServiceImpl(EspecialidadRepository repository, ProblemaRepository probl) {
@@ -38,22 +40,21 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 
     @Override
     public ResponseEspecialidadDto guardar(EspecialidadDto especialidadDto) {
-        ModelMapper mapper = new ModelMapper();
         Especialidad especialidad = EspecialidadMapper.especialidadSaveMapper(especialidadDto);
 
         if(verificarSiExiste(especialidad)){
             throw new EspecialidadNotFoundException("La especialidad ya existe.", HttpStatus.BAD_REQUEST);
         }
         Set<TipoProblema> problemas = new HashSet<>();
-        especialidadDto.getListaProblemas().forEach(p -> {
-            TipoProblema problema = problemaRepository.findById(p).orElseThrow(
-                    () -> new ProblemaNotFoundException("No existen problemas con este id.", HttpStatus.NOT_FOUND));
+        especialidadDto.getListaProblemasId().forEach((id) -> {
+            TipoProblema problema = problemaRepository.findById(id).orElseThrow(
+                    () -> new ProblemaNotFoundException("Problema no encontrado", HttpStatus.BAD_REQUEST));
             problemas.add(problema);
+            problema.setEspecialidad(especialidad);
         });
         especialidad.setListaProblemas(problemas);
-        repository.save(especialidad);
-        EspecialidadDto response = mapper.map(especialidad, EspecialidadDto.class);
-        return new ResponseEspecialidadDto(response, "Especialidad guardada con éxito");
+        Especialidad esp = repository.save(especialidad);
+        return new ResponseEspecialidadDto(esp.getNombre(), esp.getDescripcion(), "Especialidad guardada con éxito");
     }
 
     @Override
@@ -77,7 +78,6 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 
     @Override
     public Set<EspecialidadFindDto> findAll() {
-        ModelMapper mapper = new ModelMapper();
         List<Especialidad> especialidades = repository.findAll();
         return EspecialidadMapper.especialidadFindAllMapper(especialidades);
     }
@@ -95,8 +95,8 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
         encontrado.setListaProblemas(esp.getListaProblemas());
 
         Especialidad especialidad = repository.save(encontrado);
-        EspecialidadDto respuesta = mapper.map(especialidad, EspecialidadDto.class);
-        return new ResponseEspecialidadDto(respuesta, "Servicio modificado con éxito");
+        return new ResponseEspecialidadDto(especialidad.getNombre(), especialidad.getDescripcion(),
+                "Especialidad modificada con éxito");
     }
 
     @Override

@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class ResponseEspecialidadDto {
 
-    private EspecialidadDto ESpecialidadDto;
+    private String nombre;
+    private String descripcion;
     private String mensaje;
 }
 

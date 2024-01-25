@@ -1,7 +1,5 @@
 package com.utn.dto.request;
 
-import com.utn.entity.Tecnico;
-import com.utn.entity.TipoProblema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -20,5 +18,5 @@ public class EspecialidadDto {
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
     @NotEmpty(message = "Lista no debe estar vacía")
-    private Set<Long> listaProblemas;
+    private Set<Long> listaProblemasId;
 }

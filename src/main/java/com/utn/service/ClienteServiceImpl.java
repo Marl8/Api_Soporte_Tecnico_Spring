@@ -49,10 +49,11 @@ public class ClienteServiceImpl implements IClienteService {
             Servicio servicio = servicioRepository.findById(serv).orElseThrow(
                     () -> new ServicioNotFoundException("Servicio inexistente", HttpStatus.NOT_FOUND));
             servicios.add(servicio);
+            servicio.getClientes().add(cliente);
         });
         cliente.setServicios(servicios);
-        repository.save(cliente);
-        return new ResponseClienteDto(cliente.getRazonSocial(), cliente.getCuit(),
+        Cliente c = repository.save(cliente);
+        return new ResponseClienteDto(c.getRazonSocial(), c.getCuit(),
                 "Cliente guardado con éxito.");
     }
 

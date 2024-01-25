@@ -22,10 +22,10 @@ public class Especialidad{
     private String descripcion;
 
     @OneToMany(mappedBy = "especialidad", fetch = FetchType.EAGER)
-    private Set<TipoProblema> listaProblemas;
+    private Set<TipoProblema> listaProblemas = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "especialidad_tecnico", joinColumns = @JoinColumn(name = "fk_especialidad"),
+    @ManyToMany(targetEntity = Tecnico.class, cascade = CascadeType.MERGE)
+    @JoinTable(name = "especialidad-tecnico", joinColumns = @JoinColumn(name = "fk_especialidad"),
             inverseJoinColumns = @JoinColumn(name = "fk_tecnico"))
     private Set<Tecnico> listaTecnicos = new HashSet<>();
 }
