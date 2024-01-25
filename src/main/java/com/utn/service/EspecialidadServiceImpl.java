@@ -101,12 +101,12 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 
     @Override
     public ResponseDto eliminar(Long id) {
-        Optional<Especialidad> servicio = repository.findById(id);
+        Optional<Especialidad> especialidad = repository.findById(id);
 
-        if(servicio.isPresent()){
+        if(especialidad.isPresent()){
             repository.deleteById(id);
         }
-        return new ResponseDto("Servicio eliminado con éxito");
+        return new ResponseDto("Especialidad eliminada con éxito");
     }
 
 

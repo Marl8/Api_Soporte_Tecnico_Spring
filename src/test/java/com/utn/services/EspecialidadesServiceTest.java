@@ -1,7 +1,9 @@
 package com.utn.services;
 
 import com.utn.dto.request.EspecialidadDto;
+import com.utn.dto.request.EspecialidadFindDto;
 import com.utn.dto.request.EspecialidadUpdateDto;
+import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
 import com.utn.entity.TipoProblema;
@@ -17,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -64,6 +65,38 @@ public class EspecialidadesServiceTest {
     }
 
     @Test
+    @DisplayName("test OK para asignar un problema a una especialidad")
+    void asignarProblemaTestOK(){
+        Long id1 = 1L;
+        Long id2 = 1L;
+        Especialidad especialidad = EspecialidadObjectUtils.especialidad();
+        TipoProblema problema = ProblemasObjectUtils.problema();
+        ResponseDto expected = new ResponseDto("Asignación realizada con éxito");
+
+        when(repository.findById(any())).thenReturn(Optional.of(especialidad));
+        when(problemaRepository.findById(any())).thenReturn(Optional.of(problema));
+        when(repository.save(any())).thenReturn(especialidad);
+
+        ResponseDto actual = service.asignarProblema(id1, id2);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("test OK para findEspecialidad")
+    void findEspecialidadTestOK(){
+        EspecialidadFindDto expected = EspecialidadObjectUtils.especialidadFindDto();
+        Long id = 1L;
+        Especialidad especialidad = EspecialidadObjectUtils.especialidad();
+
+        when(repository.findById(any())).thenReturn(Optional.of(especialidad));
+
+        EspecialidadFindDto actual = service.findEspecialidad(id);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     @DisplayName("test OK para  modificar especialidad")
     void modificarEspecialidadTestOk(){
         Especialidad especialidad = EspecialidadObjectUtils.especialidad();
@@ -76,6 +109,20 @@ public class EspecialidadesServiceTest {
         when(repository.save(any())).thenReturn(modificado);
 
         ResponseEspecialidadDto actual = service.modificar(argumentSut);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("test OK para eliminar una especialidad")
+    void eliminarEspecialidadTestOK(){
+        Long id = 1L;
+        Especialidad especialidad = EspecialidadObjectUtils.especialidad();
+        ResponseDto expected = new ResponseDto("Especialidad eliminada con éxito");
+
+        when(repository.findById(any())).thenReturn(Optional.of(especialidad));
+
+        ResponseDto actual = service.eliminar(id);
 
         assertEquals(expected, actual);
     }

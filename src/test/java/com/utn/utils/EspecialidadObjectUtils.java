@@ -51,6 +51,8 @@ public class EspecialidadObjectUtils {
         EspecialidadFindDto especialidad = new EspecialidadFindDto();
         especialidad.setNombre("Soporte Tango");
         especialidad.setDescripcion("Soporte técnico del software Tango");
+        especialidad.setListaTecnicos(new HashSet<>());
+        especialidad.setListaProblemas(new HashSet<>());
         return especialidad;
     }
 
