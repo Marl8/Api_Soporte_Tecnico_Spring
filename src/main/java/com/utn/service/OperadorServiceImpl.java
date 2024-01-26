@@ -13,6 +13,7 @@ import com.utn.repository.IncidenteRepository;
 import com.utn.repository.OperadorRepository;
 import com.utn.repository.TecnicoRepository;
 import com.utn.service.Interfaces.IOperadorService;
+import com.utn.utils.OperadorMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,15 +43,14 @@ public class OperadorServiceImpl implements IOperadorService {
 
     @Override
     public ResponseOperadorDto guardar(OperadorDto operadorDto) {
-        ModelMapper mapper = new ModelMapper();
-        Operador operador = mapper.map(operadorDto, Operador.class);
+        Operador operador = OperadorMapper.operador(operadorDto);
+
 
         if(verificarSiExiste(operador)){
             throw new OperadorNotFoundException("El operador ya existe.", HttpStatus.NOT_FOUND);
         }
-        repository.save(operador);
-        OperadorDto response = mapper.map(operador, OperadorDto.class);
-        return new ResponseOperadorDto(response, "Operador guardado con éxito.");
+        Operador guardado = repository.save(operador);
+        return new ResponseOperadorDto(guardado.getNombre(),  guardado.getApellido(), "Operador guardado con éxito.");
     }
 
     @Override
@@ -74,10 +74,9 @@ public class OperadorServiceImpl implements IOperadorService {
         encontrado.setNombre(operador.getNombre());
         encontrado.setApellido(operador.getApellido());
         encontrado.setListaTecnicos(operador.getListaTecnicos());
-        repository.save(encontrado);
+        Operador modificado = repository.save(encontrado);
 
-        OperadorDto respuesta = mapper.map(operador, OperadorDto.class);
-        return new ResponseOperadorDto(respuesta, "Operador modificado con éxito");
+        return new ResponseOperadorDto(modificado.getNombre(),modificado.getApellido(), "Operador modificado con éxito");
     }
 
     @Override

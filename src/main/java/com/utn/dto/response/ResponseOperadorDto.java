@@ -1,6 +1,5 @@
 package com.utn.dto.response;
 
-import com.utn.dto.request.OperadorDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ResponseOperadorDto {
 
-    private OperadorDto operadorDto;
+    private String nombre;
+    private String apellido;
     private String mensaje;
 }
