@@ -4,6 +4,9 @@ import com.utn.dto.request.OperadorDto;
 import com.utn.dto.request.OperadorUpdateDto;
 import com.utn.entity.Operador;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OperadorObjectUtils {
 
     public static Operador operador(){
@@ -32,5 +35,9 @@ public class OperadorObjectUtils {
         operador.setNombre("Carlos");
         operador.setApellido("Alonzo");
         return operador;
+    }
+
+    public static List<Operador> listaOperadores(){
+        return new ArrayList<>(List.of(operador(), operador2()));
     }
 }

@@ -31,14 +31,13 @@ public class OperadorServiceImpl implements IOperadorService {
 
     TecnicoRepository tecnicoRepository;
 
-    EspecialidadRepository especialidadRepository;
 
     public OperadorServiceImpl(OperadorRepository repository, IncidenteRepository incidenteRepository
-    ,TecnicoRepository tecnicoRepository, EspecialidadRepository especialidadRepository) {
+    ,TecnicoRepository tecnicoRepository) {
         this.repository = repository;
         this.incidenteRepository = incidenteRepository;
         this.tecnicoRepository = tecnicoRepository;
-        this.especialidadRepository = especialidadRepository;
+
     }
 
     @Override
@@ -135,13 +134,15 @@ public class OperadorServiceImpl implements IOperadorService {
      * incidente de acuerdo a los tipos de problemas asociados.
      * @param incident Recibe como parámetro el incidente
      * */
-    private List<Tecnico> tecnicosEspecialidadesIncidente(Incidente incident) {
+    public List<Tecnico> tecnicosEspecialidadesIncidente(Incidente incident) {
         List<Especialidad> listaEspecialidadesIncidente = new ArrayList<>();
 
         // Se genera la lista de las especialidades requeridas según los tipos de problemas reportados en el incidente.
         incident.getListaProblemas().forEach(p -> listaEspecialidadesIncidente.add(p.getEspecialidad()));
+        System.out.println(listaEspecialidadesIncidente);
 
         List<Tecnico> listaTecnicos = tecnicoRepository.findAll();
+        System.out.println(listaTecnicos);
         List<Tecnico> listaEspecialidad;
 
        // Se genera una lista con los técnicos que tengan dichas especialidades.

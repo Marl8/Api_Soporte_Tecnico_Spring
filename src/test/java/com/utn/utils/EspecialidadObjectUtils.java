@@ -59,4 +59,8 @@ public class EspecialidadObjectUtils {
     public static List<Especialidad> listaEspecialidades(){
         return List.of(especialidad2());
     }
+
+    public static Set<Especialidad> listaSetEspecialidades(){
+        return Set.of(especialidad());
+    }
 }
