@@ -37,7 +37,6 @@ public class ProblemaServiceImpl implements IProblemaService {
 
     @Override
     public TipoProblemaDto findProblema(Long id) {
-
         ModelMapper mapper = new ModelMapper();
         TipoProblema problema = repository.findById(id).orElseThrow(
                 () -> new ProblemaNotFoundException("No existen problemas con este id.", HttpStatus.NOT_FOUND));
