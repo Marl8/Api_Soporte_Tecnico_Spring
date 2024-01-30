@@ -25,23 +25,19 @@ public class ServicioServiceImpl implements IServicioService {
 
     ServicioRepository repository;
 
-    ClienteRepository clienteRepository;
-
-    public ServicioServiceImpl(ServicioRepository repository, ClienteRepository clienteRepository) {
+    public ServicioServiceImpl(ServicioRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public ResponseServicioDto guardarServicio(ServicioDto servicioDto) {
-        ModelMapper mapper = new ModelMapper();
         Servicio servicio = ServicioMapper.servicioSaveMapper(servicioDto);
 
         if(verificarSiExiste(servicio)){
             throw new ServicioNotFoundException("El servicio ya existe.", HttpStatus.BAD_REQUEST);
         }
-        repository.save(servicio);
-        ServicioDto response = mapper.map(servicio, ServicioDto.class);
-        return new ResponseServicioDto(response, "Servicio guardado con éxito.");
+        Servicio guardado = repository.save(servicio);
+        return new ResponseServicioDto(guardado.getTipoServicio(), guardado.getDescripcion(), "Servicio guardado con éxito.");
     }
 
     @Override
@@ -61,7 +57,7 @@ public class ServicioServiceImpl implements IServicioService {
         List<Servicio> servicios = repository.findAll();
         Set<Servicio> result = new HashSet<>(servicios);
         return result.stream().map(s -> new ServicioDto(s.getId(),
-                s.getDescripcion(), s.getTipoServicio())).collect(Collectors.toSet());
+                s.getTipoServicio(), s.getDescripcion())).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -77,8 +73,7 @@ public class ServicioServiceImpl implements IServicioService {
         encontrado.setClientes(servicio.getClientes());
 
         Servicio modificado = repository.save(encontrado);
-        ServicioDto respuesta = mapper.map(modificado, ServicioDto.class);
-        return new ResponseServicioDto(respuesta, "Servicio modificado con éxito");
+        return new ResponseServicioDto(modificado.getTipoServicio(), modificado.getDescripcion(), "Servicio modificado con éxito");
     }
 
     @Override

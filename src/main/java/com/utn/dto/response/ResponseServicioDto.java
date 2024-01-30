@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ResponseServicioDto {
 
-    private ServicioDto servicioDto;
+    private String tipoServicio;
+    private String descripcion;
     private String mensaje;
 }
