@@ -3,8 +3,11 @@ package com.utn.utils;
 import com.utn.dto.request.ClienteDto;
 import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.entity.Cliente;
+import com.utn.entity.Incidente;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ClienteObjectUtils {
@@ -15,6 +18,15 @@ public class ClienteObjectUtils {
         cliente.setCuit("30254578094");
         cliente.setTelefono("0115786159");
         cliente.setCorreoElectronico("nn@Gmail.com");
+        return cliente;
+    }
+
+    public static Cliente cliente2(){
+        Cliente cliente = new Cliente();
+        cliente.setRazonSocial("Suma SA");
+        cliente.setCuit("30125869709");
+        cliente.setTelefono("01145002981");
+        cliente.setCorreoElectronico("suma@Gmail.com");
         return cliente;
     }
 

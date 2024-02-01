@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TecnicoUpdateDto {
+public class TecnicoCompleteDto {
 
     private Long id;
     @NotBlank(message = "Nombre es requerido")

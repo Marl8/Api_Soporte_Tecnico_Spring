@@ -2,7 +2,7 @@ package com.utn.service;
 
 import com.utn.dto.request.TecnicoDto;
 import com.utn.dto.request.TecnicoFindDto;
-import com.utn.dto.request.TecnicoUpdateDto;
+import com.utn.dto.request.TecnicoCompleteDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseTecnicoDto;
 import com.utn.entity.EEstado;
@@ -46,7 +46,6 @@ public class TecnicoServiceImpl implements ITecnicoService {
 
     @Override
     public ResponseTecnicoDto guardar(TecnicoDto tecnicoDto) {
-        ModelMapper mapper = new ModelMapper();
         Tecnico tecnico = TecnicoMapper.tecnicoSaveMapper(tecnicoDto);
 
         Optional<Tecnico> encontrado = repository.findTecnicoByNombreAndApellido(
@@ -62,9 +61,8 @@ public class TecnicoServiceImpl implements ITecnicoService {
             listaEspecialidades.add(esp);
         });
         tecnico.setListaEspecialidades(listaEspecialidades);
-        repository.save(tecnico);
-        TecnicoDto response = mapper.map(tecnico,TecnicoDto.class);
-        return new ResponseTecnicoDto(response, "Técnico guardado con éxito");
+        Tecnico guardado = repository.save(tecnico);
+        return new ResponseTecnicoDto("El técnico " + guardado.getNombre() + " " + guardado.getApellido() + " fue guardado con éxito");
     }
 
     @Override
@@ -78,14 +76,14 @@ public class TecnicoServiceImpl implements ITecnicoService {
         return new ResponseDto("Asignación realizada con éxito");
     }
     @Override
-    public TecnicoDto findTecnico(Long id) {
+    public TecnicoCompleteDto findTecnico(Long id) {
         ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
             throw new TecnicoNotFoundException("No existen técnicos con este id.", HttpStatus.NOT_FOUND);
         }
         Tecnico tecnico = repository.findById(id).get();
-        return mapper.map(tecnico, TecnicoDto.class);
+        return mapper.map(tecnico, TecnicoCompleteDto.class);
     }
 
     @Override
@@ -100,7 +98,7 @@ public class TecnicoServiceImpl implements ITecnicoService {
 
     @Transactional
     @Override
-    public ResponseTecnicoDto modificar(TecnicoUpdateDto tecnicoDto) {
+    public ResponseTecnicoDto modificar(TecnicoCompleteDto tecnicoDto) {
         ModelMapper mapper = new ModelMapper();
         Tecnico tecnico = mapper.map(tecnicoDto, Tecnico.class);
         Tecnico encontrado = repository.findById(tecnico.getId())
@@ -113,8 +111,8 @@ public class TecnicoServiceImpl implements ITecnicoService {
         encontrado.setNotificacion(tecnico.getNotificacion());
 
         Tecnico modificado = repository.save(encontrado);
-        TecnicoDto respuesta = mapper.map(modificado, TecnicoDto.class);
-        return new ResponseTecnicoDto(respuesta, "Técnico modificado con éxito");
+        return new ResponseTecnicoDto("El técnico " + modificado.getNombre() + " " + modificado.getApellido() +
+                " fue modificado con éxito");
     }
 
     @Override
@@ -128,7 +126,7 @@ public class TecnicoServiceImpl implements ITecnicoService {
     }
 
     /**
-     * Método pra encontrar al técnico que más incidentes resolvió en los últimos N días.
+     * Método para encontrar al técnico que más incidentes resolvió en los últimos N días.
      * @param dias El rango de los últimos días para realizar la búsqueda
      * */
     @Override
@@ -152,8 +150,8 @@ public class TecnicoServiceImpl implements ITecnicoService {
                 .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
 
         ModelMapper mapper = new ModelMapper();
-        TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
-        return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos es: "
+        TecnicoCompleteDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoCompleteDto.class);
+        return new ResponseTecnicoDto("El Técnico con más incidentes resueltos es: "
                 + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 
@@ -193,8 +191,8 @@ public class TecnicoServiceImpl implements ITecnicoService {
                     HttpStatus.BAD_REQUEST);
         }
         ModelMapper mapper = new ModelMapper();
-        TecnicoDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoDto.class);
-        return new ResponseTecnicoDto(tecnicoDto, "El Técnico con más incidentes resueltos de la especialidad " +
+        TecnicoCompleteDto tecnicoDto = mapper.map(tecnicoConMasIncidentes, TecnicoCompleteDto.class);
+        return new ResponseTecnicoDto("El Técnico con más incidentes resueltos de la especialidad " +
                 especialidad + " es: " + tecnicoDto.getNombre() + " " + tecnicoDto.getApellido());
     }
 
@@ -228,8 +226,8 @@ public class TecnicoServiceImpl implements ITecnicoService {
         Tecnico tecnicoMasRapido = incidenteMasRapido.getTecnico();
 
         ModelMapper mapper = new ModelMapper();
-        TecnicoDto dto = mapper.map(tecnicoMasRapido, TecnicoDto.class);
-        return new ResponseTecnicoDto(dto, "El técnico que más rápido resolvió un incidente" +
+        TecnicoCompleteDto dto = mapper.map(tecnicoMasRapido, TecnicoCompleteDto.class);
+        return new ResponseTecnicoDto("El técnico que más rápido resolvió un incidente" +
                 "fue: " + tecnicoMasRapido.getNombre() + " " + dto.getApellido());
     }
 }

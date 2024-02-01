@@ -1,9 +1,6 @@
 package com.utn.dto.request;
 
-import com.utn.entity.Especialidad;
-import com.utn.entity.Incidente;
 import com.utn.entity.MedioNotificacionEnum;
-import com.utn.entity.Operador;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

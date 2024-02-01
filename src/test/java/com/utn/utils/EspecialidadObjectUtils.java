@@ -61,6 +61,6 @@ public class EspecialidadObjectUtils {
     }
 
     public static Set<Especialidad> listaSetEspecialidades(){
-        return Set.of(especialidad());
+        return new HashSet<>(Set.of(especialidad()));
     }
 }

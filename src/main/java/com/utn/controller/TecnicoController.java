@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.TecnicoDto;
-import com.utn.dto.request.TecnicoUpdateDto;
+import com.utn.dto.request.TecnicoCompleteDto;
 import com.utn.service.Interfaces.ITecnicoService;
 import com.utn.service.TecnicoServiceImpl;
 import jakarta.validation.Valid;
@@ -39,7 +39,7 @@ public class TecnicoController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody TecnicoUpdateDto tecnicoDto) {
+    public ResponseEntity<?> modificar(@Valid @RequestBody TecnicoCompleteDto tecnicoDto) {
         return new ResponseEntity<>(service.modificar(tecnicoDto), HttpStatus.OK);
     }
 
