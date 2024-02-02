@@ -34,6 +34,16 @@ public class TecnicoObjectsUtils {
         return tecnico;
     }
 
+    public static Tecnico tecnico3(){
+        Tecnico tecnico = new Tecnico();
+        tecnico.setDisponibilidad(true);
+        tecnico.setNombre("Ariel");
+        tecnico.setApellido("Canale");
+        tecnico.setListaEspecialidades(EspecialidadObjectUtils.listaSetEspecialidades());
+        tecnico.setNotificacion(MedioNotificacionEnum.WHATSAPP);
+        return tecnico;
+    }
+
     public static TecnicoDto tecnicoDto(){
         TecnicoDto tecnico = new TecnicoDto();
         tecnico.setDisponibilidad(true);
@@ -79,6 +89,6 @@ public class TecnicoObjectsUtils {
     }
 
     public static List<Tecnico> listaTecnicos() {
-        return new ArrayList<>(List.of(tecnico1(),tecnico2()));
+        return new ArrayList<>(List.of(tecnico1(),tecnico2(), tecnico3()));
     }
 }

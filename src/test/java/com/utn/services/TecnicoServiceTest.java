@@ -145,7 +145,7 @@ public class TecnicoServiceTest {
 
     @Test
     @DisplayName("test OK para Técnico con más incidentes resueltos en los últimos X dias")
-    void tecnicoConMasIncidientesResuletosXDiaTestOK() {
+    void tecnicoConMasIncidentesResueltosXDiaTestOK() {
         long dias = 4;
         List<Incidente> listaIncidentes = IncidenteObjectsUtils.listaIncidentes();
         Tecnico tecnico = TecnicoObjectsUtils.tecnico2();
@@ -155,6 +155,36 @@ public class TecnicoServiceTest {
         when(incidenteRepository.findIncidenteByEstadoAndFecha(any(), any())).thenReturn(listaIncidentes);
 
         ResponseTecnicoDto actual = service.tecnicoConMasResueltos(dias);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("test OK para técnico con más incidentes resueltos por especialidad")
+    void tecnicosConMasResueltosPorEspecialidadTestOK() {
+        long dias = 4;
+        String especialidad = "Soporte Tango";
+        List<Incidente> listaIncidentes = IncidenteObjectsUtils.listaIncidentes();
+        ResponseTecnicoDto expected = new ResponseTecnicoDto("El Técnico con más incidentes resueltos de la especialidad " +
+                especialidad + " es: Diego Palomino");
+
+        when(incidenteRepository.findIncidenteByEstadoAndFecha(any(),any())).thenReturn(listaIncidentes);
+
+        ResponseTecnicoDto actual = service.tecnicoEspecialidadMasResueltos(dias, especialidad);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("test OK para encontrar a el técnico más rápido")
+    void tecnicoMasRapidoTestOK() {
+        List<Incidente> listaIncidentes = IncidenteObjectsUtils.listaIncidentes();
+        ResponseTecnicoDto expected = new ResponseTecnicoDto("El técnico que más rápido resolvió un incidente" +
+                "fue: Ariel Canale");
+
+        when(incidenteRepository.findIncidenteByEstado(any())).thenReturn(listaIncidentes);
+
+        ResponseTecnicoDto actual = service.tecnicoMasRapido();
 
         assertEquals(expected, actual);
     }

@@ -66,7 +66,19 @@ public class IncidenteObjectsUtils {
         return incidente;
     }
 
+    public static Incidente incidente6(){
+        Incidente incidente = new Incidente();
+        incidente.setCliente(ClienteObjectUtils.cliente2());
+        incidente.setTecnico(TecnicoObjectsUtils.tecnico3());
+        incidente.setFechaCreacion(LocalDateTime.of(2024, 2,2, 14,52));
+        incidente.setFechaCierre(LocalDateTime.now());
+        incidente.setEstado(EEstado.RESUELTO);
+        incidente.setEsComplejo(false);
+        incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
+        return incidente;
+    }
+
     public static List<Incidente> listaIncidentes() {
-        return new ArrayList<>(List.of(incidente2(), incidente3(), incidente4(), incidente5()));
+        return new ArrayList<>(List.of(incidente2(), incidente3(), incidente4(), incidente5(), incidente6()));
     }
 }
