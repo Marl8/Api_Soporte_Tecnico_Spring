@@ -1,7 +1,7 @@
 package com.utn.controller;
 
 import com.utn.dto.request.IncidenteDto;
-import com.utn.dto.request.IncidenteUpdateDto;
+import com.utn.dto.request.IncidenteCompleteDto;
 import com.utn.service.Interfaces.IIncidenteService;
 import com.utn.service.IncidenteServiceImpl;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class IncidenteController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody IncidenteUpdateDto incidenteDto) {
+    public ResponseEntity<?> modificar(@Valid @RequestBody IncidenteCompleteDto incidenteDto) {
         return new ResponseEntity<>(service.modificar(incidenteDto), HttpStatus.OK);
     }
 

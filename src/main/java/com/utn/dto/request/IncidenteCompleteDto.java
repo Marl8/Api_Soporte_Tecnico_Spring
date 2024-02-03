@@ -1,10 +1,7 @@
 package com.utn.dto.request;
 
 import com.utn.entity.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class IncidenteUpdateDto {
+public class IncidenteCompleteDto {
 
     @Positive(message = "Id debe ser un número positivo")
     private Long id;
@@ -26,17 +23,19 @@ public class IncidenteUpdateDto {
     @Positive(message = "Debe ser un número positivo")
     private int tiempoResolucion;
     @NotNull(message = "No debe ser null")
+    private boolean esComplejo;
+    @NotNull(message = "No debe ser null")
     private LocalDateTime fechaCreacion;
     @NotNull(message = "No debe ser null")
     private LocalDateTime fechaCierre;
     @Positive(message = "Debe ser un número positivo")
     private int horaColchon;
     @Positive(message = "Debe ser un número positivo")
-    private Servicio idServicio;
+    private Servicio servicio;
     @Positive(message = "Debe ser un número positivo")
-    private Tecnico idTecnico;
+    private Tecnico tecnico;
     @Positive(message = "Debe ser un número positivo")
-    private Cliente idCliente;
+    private Cliente cliente;
     @NotEmpty(message = "No puede ser una lista vacía")
     private Set<TipoProblema> listaProblemas;
 }

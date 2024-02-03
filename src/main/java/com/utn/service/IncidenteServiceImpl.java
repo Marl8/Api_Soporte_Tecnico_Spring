@@ -1,7 +1,7 @@
 package com.utn.service;
 
 import com.utn.dto.request.IncidenteDto;
-import com.utn.dto.request.IncidenteUpdateDto;
+import com.utn.dto.request.IncidenteCompleteDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseIncidenteDto;
 import com.utn.entity.Cliente;
@@ -69,24 +69,23 @@ public class IncidenteServiceImpl implements IIncidenteService {
         incidente.setFechaCreacion(LocalDateTime.now());
         incidente.modificarEstado();
         incidente.setTiempoResolucion(sumarTiempoEstimado(incidente.getListaProblemas()));
-        repository.save(incidente);
-        IncidenteDto response = mapper.map(incidente, IncidenteDto.class);
-        return new ResponseIncidenteDto(response, "Incidente guardado con éxito.");
+        Incidente guardado = repository.save(incidente);
+        return new ResponseIncidenteDto(guardado.getDescripcion(), "Incidente guardado con éxito.");
     }
 
     @Override
-    public IncidenteDto findIncidente(Long id) {
+    public IncidenteCompleteDto findIncidente(Long id) {
         ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
             throw new IncidenteNotFoundException("No existen incidentes con ese id.", HttpStatus.NOT_FOUND);
         }
         Incidente incidente = repository.findById(id).get();
-        return mapper.map(incidente, IncidenteDto.class);
+        return mapper.map(incidente, IncidenteCompleteDto.class);
     }
 
     @Override
-    public ResponseIncidenteDto modificar(IncidenteUpdateDto incidenteDto) {
+    public ResponseIncidenteDto modificar(IncidenteCompleteDto incidenteDto) {
         ModelMapper mapper = new ModelMapper();
         Incidente incidente = mapper.map(incidenteDto, Incidente.class);
         Incidente encontrado = repository.findById(incidente.getId())
@@ -108,9 +107,8 @@ public class IncidenteServiceImpl implements IIncidenteService {
             incidente.modificarEstado();
             incidente.getTecnico().setDisponibilidad(true);
         }
-        repository.save(encontrado);
-        IncidenteDto respuesta = mapper.map(incidente, IncidenteDto.class);
-        return new ResponseIncidenteDto(respuesta, "Incidente modificado con éxito");
+        Incidente modificado = repository.save(encontrado);
+        return new ResponseIncidenteDto(modificado.getDescripcion(), "Incidente modificado con éxito");
     }
 
     @Override

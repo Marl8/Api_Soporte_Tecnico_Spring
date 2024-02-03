@@ -3,6 +3,7 @@ package com.utn.utils;
 import com.utn.dto.request.TipoProblemaDto;
 import com.utn.entity.TipoProblema;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProblemasObjectUtils {
@@ -33,6 +34,6 @@ public class ProblemasObjectUtils {
     }
 
     public static Set<TipoProblema> listaProblemas() {
-        return Set.of(problema());
+        return new HashSet<>(Set.of(problema()));
     }
 }
