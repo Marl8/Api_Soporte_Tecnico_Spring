@@ -84,8 +84,16 @@ public class TecnicoObjectsUtils {
         return tecnico;
     }
 
+    public static TecnicoFindDto tecnicoFindDto3(){
+        TecnicoFindDto tecnico = new TecnicoFindDto();
+        tecnico.setDisponibilidad(true);
+        tecnico.setNombre("Ariel");
+        tecnico.setApellido("Canale");
+        return tecnico;
+    }
+
     public static Set<TecnicoFindDto> listaTecnicoFindDto(){
-        return new HashSet<>(Set.of(tecnicoFindDto(), tecnicoFindDto2()));
+        return new HashSet<>(Set.of(tecnicoFindDto(), tecnicoFindDto2(), tecnicoFindDto3()));
     }
 
     public static List<Tecnico> listaTecnicos() {
