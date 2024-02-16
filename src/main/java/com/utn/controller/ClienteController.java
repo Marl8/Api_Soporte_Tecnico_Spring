@@ -22,7 +22,7 @@ public class ClienteController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/guardar")
     public ResponseEntity<?> guardar(@Valid @RequestBody ClienteDto clienteDto){
         return new ResponseEntity<>(service.guardarCliente(clienteDto), HttpStatus.CREATED);
     }

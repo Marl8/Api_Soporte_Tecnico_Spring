@@ -1,9 +1,6 @@
 package com.utn.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +11,9 @@ import java.util.Set;
 @Data
 public class ClienteDto {
 
-    @NotBlank(message = "Nombre es requerido")
+    @NotNull(message = "Nombre es requerido")
     private String nombre;
-    @NotBlank(message = "Apellido es requerido")
+    @NotNull(message = "Apellido es requerido")
     private String apellido;
     @NotBlank(message = "Razón Social es requerido")
     private String razonSocial;
