@@ -48,6 +48,17 @@ public class ExceptionController {
         return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 
+    @ExceptionHandler(UserCustomException.class)
+    public ResponseEntity<?> userCustomException(UserCustomException ex){
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    }
+
+    @ExceptionHandler(RolGenericException.class)
+    public ResponseEntity<?> userCustomException(RolGenericException ex){
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
+    }
+
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> fallaValidacion(MethodArgumentTypeMismatchException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
