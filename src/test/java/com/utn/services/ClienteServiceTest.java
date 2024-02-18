@@ -1,6 +1,7 @@
 package com.utn.services;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteFindDto;
 import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.dto.response.ResponseClienteDto;
 import com.utn.dto.response.ResponseDto;
@@ -97,7 +98,7 @@ public class ClienteServiceTest {
 
         when(repository.findById(any())).thenReturn(Optional.of(cliente));
 
-        ClienteDto actual = clienteService.findCliente(id);
+        ClienteFindDto actual = clienteService.findCliente(id);
 
         assertEquals(expected.getRazonSocial(), actual.getRazonSocial());
         assertEquals(expected.getCuit(), actual.getCuit());

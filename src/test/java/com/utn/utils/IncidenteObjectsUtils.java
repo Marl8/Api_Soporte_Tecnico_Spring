@@ -2,6 +2,7 @@ package com.utn.utils;
 
 import com.utn.dto.request.IncidenteCompleteDto;
 import com.utn.dto.request.IncidenteDto;
+import com.utn.dto.request.IncidenteUpdateDto;
 import com.utn.entity.EEstado;
 import com.utn.entity.Incidente;
 
@@ -87,7 +88,6 @@ public class IncidenteObjectsUtils {
         IncidenteDto incidente = new IncidenteDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
         incidente.setIdCliente(1L);
-        incidente.setFechaCreacion(LocalDateTime.now());
         incidente.setIdServicio(1L);
         incidente.setIdTecnico(1L);
         Set<Long> listaIdProblemas = new HashSet<>();
@@ -96,24 +96,26 @@ public class IncidenteObjectsUtils {
         return incidente;
     }
 
+    public static IncidenteUpdateDto incidenteUpdateDto(){
+        IncidenteUpdateDto incidente = new IncidenteUpdateDto();
+        incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
+        incidente.setEsComplejo(false);
+        return incidente;
+    }
+
+    public static IncidenteUpdateDto incidenteUpdateDto2(){
+        IncidenteUpdateDto incidente = new IncidenteUpdateDto();
+        incidente.setFechaCierre(LocalDateTime.now());
+        incidente.setEsComplejo(false);
+        incidente.setListaProblemas(Set.of(1L));
+        return incidente;
+    }
+
     public static IncidenteCompleteDto incidenteCompleteDto(){
         IncidenteCompleteDto incidente = new IncidenteCompleteDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
         incidente.setCliente(ClienteObjectUtils.cliente());
         incidente.setFechaCreacion(LocalDateTime.now());
-        incidente.setEsComplejo(false);
-        incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
-        return incidente;
-    }
-
-    public static IncidenteCompleteDto incidenteCompleteDto2(){
-        IncidenteCompleteDto incidente = new IncidenteCompleteDto();
-        incidente.setDescripcion("Problemas relacionados con errores en actualizaciones de Windows");
-        incidente.setCliente(ClienteObjectUtils.cliente2());
-        incidente.setTecnico(TecnicoObjectsUtils.tecnico1());
-        incidente.setFechaCreacion(LocalDateTime.of(2024, 1,30, 10,25));
-        incidente.setFechaCierre(LocalDateTime.now());
-        incidente.setEstado(EEstado.RESUELTO);
         incidente.setEsComplejo(false);
         incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
         return incidente;

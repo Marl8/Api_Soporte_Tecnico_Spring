@@ -1,6 +1,5 @@
 package com.utn.dto.request;
 
-import com.utn.entity.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -15,18 +14,20 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class IncidenteDto {
+public class IncidenteUpdateDto {
 
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
     @Positive(message = "Debe ser un número positivo")
     private int tiempoResolucion;
+    @NotNull(message = "No debe ser null")
+    private boolean esComplejo;
+    @NotNull(message = "No debe ser null")
+    private LocalDateTime fechaCierre;
     @Positive(message = "Debe ser un número positivo")
-    private Long idServicio;
-    @Positive(message = "Debe ser un número positivo")
-    private Long idTecnico;
-    @Positive(message = "Debe ser un número positivo")
-    private Long idCliente;
+    private int horaColchon;
     @NotEmpty(message = "No puede ser una lista vacía")
     private Set<Long> listaProblemas;
+    @NotNull(message = "Debe contener un id de técnico")
+    private Long idTecnico;
 }

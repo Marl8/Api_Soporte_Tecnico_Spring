@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TipoProblemaDto {
+public class TipoProblemaCompleteDto {
 
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
     @Positive(message = "Id debe ser un número positivo")
     private int tiempoEstimado;
+    private Especialidad especialidad;
+    private Incidente incidente;
 }

@@ -33,13 +33,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/error").permitAll();
                     auth.requestMatchers("/v1/api/login").permitAll();
-                    /*auth.requestMatchers(
+                    auth.requestMatchers(
                             "/api/**",
                             "/swagger-ui/**",
                             "/swagger-ui.html",
                             "/swagger-resources/**",
                             "/v3/api-docs/**",
-                            "/configuration/**").permitAll();*/
+                            "/configuration/**").permitAll();
                     auth.requestMatchers("/v1/api/incidente/guardar").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers("/v1/api/cliente/guardar").hasAnyRole("USER", "ADMIN");
                     auth.requestMatchers("/v1/api/operador/asignarHoras/{idIncidente}/{horas}").hasAnyRole("OPERADOR", "ADMIN");

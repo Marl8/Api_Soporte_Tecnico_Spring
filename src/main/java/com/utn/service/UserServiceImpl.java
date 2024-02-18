@@ -1,5 +1,6 @@
 package com.utn.service;
 
+import com.utn.dto.request.UserCompleteDto;
 import com.utn.dto.request.UserDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseUserDto;
@@ -52,12 +53,13 @@ public class UserServiceImpl implements IUserService {
         usuario.setRoles(roles);
         usuario.setPassword(passwordEncoder.encode(userDto.getPassword()));
         UserEntity guardado = repository.save(usuario);
+        System.out.println(guardado);
 
         return new ResponseUserDto(guardado.getNombre(), guardado.getApellido(), "Usuario guardado con éxito");
     }
 
     @Override
-    public ResponseUserDto modificarUser(UserDto userDto, Long userId) {
+    public ResponseUserDto modificarUser(UserCompleteDto userDto, Long userId) {
         ModelMapper mapper = new ModelMapper();
         UserEntity usuario = mapper.map(userDto, UserEntity.class);
         UserEntity encontrado = repository.findById(userId).orElseThrow(

@@ -1,5 +1,6 @@
 package com.utn.service;
 
+import com.utn.dto.request.TipoProblemaCompleteDto;
 import com.utn.dto.request.TipoProblemaDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseProblemaDto;
@@ -24,15 +25,13 @@ public class ProblemaServiceImpl implements IProblemaService {
 
     @Override
     public ResponseProblemaDto guardar(TipoProblemaDto problemaDto) {
-        ModelMapper mapper = new ModelMapper();
         TipoProblema problema = TipoProblemaMapper.tipoProblemaSaveMapper(problemaDto);
 
         if(verificarSiExiste(problema)){
             throw new ProblemaNotFoundException("El tipo de problema ya existe.", HttpStatus.BAD_REQUEST);
         }
         repository.save(problema);
-        TipoProblemaDto response = mapper.map(problema, TipoProblemaDto.class);
-        return new ResponseProblemaDto(response, "Problema guardado con éxito.");
+        return new ResponseProblemaDto("Problema guardado con éxito.");
     }
 
     @Override
@@ -45,10 +44,10 @@ public class ProblemaServiceImpl implements IProblemaService {
 
 
     @Override
-    public ResponseProblemaDto modificar(TipoProblemaDto problemaDto) {
+    public ResponseProblemaDto modificar(TipoProblemaCompleteDto problemaDto, Long id) {
         ModelMapper mapper = new ModelMapper();
         TipoProblema problema = mapper.map(problemaDto, TipoProblema.class);
-        TipoProblema encontrado = repository.findById(problema.getId())
+        TipoProblema encontrado = repository.findById(id)
             .orElseThrow(() -> new ProblemaNotFoundException("No se encontraron problemas asociados a este id", HttpStatus.NOT_FOUND));
 
         encontrado.setEspecialidad(problema.getEspecialidad());
@@ -56,9 +55,8 @@ public class ProblemaServiceImpl implements IProblemaService {
         encontrado.setTiempoEstimado(problema.getTiempoEstimado());
         encontrado.setIncidente(problema.getIncidente());
 
-        TipoProblema problem = repository.save(encontrado);
-        TipoProblemaDto respuesta = mapper.map(problem, TipoProblemaDto.class);
-        return new ResponseProblemaDto(respuesta, "Tipo de problema modificado con éxito");
+        repository.save(encontrado);
+        return new ResponseProblemaDto("Tipo de problema modificado con éxito");
     }
 
     @Override

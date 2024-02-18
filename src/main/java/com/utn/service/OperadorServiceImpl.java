@@ -44,7 +44,6 @@ public class OperadorServiceImpl implements IOperadorService {
     public ResponseOperadorDto guardar(OperadorDto operadorDto) {
         Operador operador = OperadorMapper.operador(operadorDto);
 
-
         if(verificarSiExiste(operador)){
             throw new OperadorNotFoundException("El operador ya existe.", HttpStatus.NOT_FOUND);
         }

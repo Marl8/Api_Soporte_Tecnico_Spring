@@ -14,14 +14,12 @@ import java.util.Set;
 @Data
 public class IncidenteCompleteDto {
 
-    @Positive(message = "Id debe ser un número positivo")
-    private Long id;
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
-    @NotNull(message = "No debe ser null")
-    EEstado estado;
     @Positive(message = "Debe ser un número positivo")
     private int tiempoResolucion;
+    @NotNull(message = "debe contener un estado")
+    private EEstado estado;
     @NotNull(message = "No debe ser null")
     private boolean esComplejo;
     @NotNull(message = "No debe ser null")
@@ -30,12 +28,14 @@ public class IncidenteCompleteDto {
     private LocalDateTime fechaCierre;
     @Positive(message = "Debe ser un número positivo")
     private int horaColchon;
-    @Positive(message = "Debe ser un número positivo")
-    private Servicio servicio;
-    @Positive(message = "Debe ser un número positivo")
-    private Tecnico tecnico;
-    @Positive(message = "Debe ser un número positivo")
-    private Cliente cliente;
     @NotEmpty(message = "No puede ser una lista vacía")
     private Set<TipoProblema> listaProblemas;
+    @NotNull(message = "Debe contener un técnico")
+    private Tecnico Tecnico;
+    @NotNull(message = "Debe contener un cliente")
+    private Cliente cliente;
+    @NotNull(message = "Debe contener un servicio")
+    private Servicio servicio;
+    @NotNull(message = "Debe contener un operado")
+    private Operador operador;
 }

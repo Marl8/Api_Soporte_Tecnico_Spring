@@ -29,7 +29,6 @@ public class RolServiceImpl implements IRolService {
 
     @Override
     public ResponseRolDto save(RolDto rolDto) {
-
         List<Rol> roles = repository.findAll();
         ModelMapper mapper = new ModelMapper();
         if(!roles.isEmpty()){

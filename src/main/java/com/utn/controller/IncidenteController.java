@@ -2,6 +2,7 @@ package com.utn.controller;
 
 import com.utn.dto.request.IncidenteDto;
 import com.utn.dto.request.IncidenteCompleteDto;
+import com.utn.dto.request.IncidenteUpdateDto;
 import com.utn.service.Interfaces.IIncidenteService;
 import com.utn.service.IncidenteServiceImpl;
 import jakarta.validation.Valid;
@@ -28,13 +29,14 @@ public class IncidenteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findTecnicoById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
+    public ResponseEntity<?> findIncidenteById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.findIncidente(id), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody IncidenteCompleteDto incidenteDto) {
-        return new ResponseEntity<>(service.modificar(incidenteDto), HttpStatus.OK);
+    @PutMapping("modificar/{id}")
+    public ResponseEntity<?> modificar(@Valid @RequestBody IncidenteUpdateDto incidenteDto, @PathVariable
+                                       @Positive(message = "Debe ser un número positivo") Long id) {
+        return new ResponseEntity<>(service.modificar(incidenteDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

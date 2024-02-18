@@ -91,8 +91,6 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
 
         encontrado.setNombre(esp.getNombre());
         encontrado.setDescripcion(esp.getDescripcion());
-        encontrado.setListaTecnicos(esp.getListaTecnicos());
-        encontrado.setListaProblemas(esp.getListaProblemas());
 
         Especialidad especialidad = repository.save(encontrado);
         return new ResponseEspecialidadDto(especialidad.getNombre(), especialidad.getDescripcion(),

@@ -21,6 +21,4 @@ public class EspecialidadUpdateDto {
     private String nombre;
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
-    @NotEmpty(message = "No puede ser una lista vacía")
-    private Set<TipoProblema> listaProblemas;
 }

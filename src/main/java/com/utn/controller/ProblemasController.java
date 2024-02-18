@@ -1,5 +1,6 @@
 package com.utn.controller;
 
+import com.utn.dto.request.TipoProblemaCompleteDto;
 import com.utn.dto.request.TipoProblemaDto;
 import com.utn.service.Interfaces.IProblemaService;
 import com.utn.service.ProblemaServiceImpl;
@@ -27,13 +28,14 @@ public class ProblemasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findTecnicoById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
+    public ResponseEntity<?> findProblemaById(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.findProblema(id), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody TipoProblemaDto problema) {
-        return new ResponseEntity<>(service.modificar(problema), HttpStatus.OK);
+    @PutMapping("modificar/{idProblema}")
+    public ResponseEntity<?> modificar(@Valid @RequestBody TipoProblemaCompleteDto problema, @Valid
+                                        @PathVariable Long idProblema) {
+        return new ResponseEntity<>(service.modificar(problema, idProblema), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class ResponseProblemaDto {
 
-    private TipoProblemaDto problema;
     private String mensaje;
 }

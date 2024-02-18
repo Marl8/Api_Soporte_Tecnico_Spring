@@ -1,5 +1,6 @@
 package com.utn.controller;
 
+import com.utn.dto.request.UserCompleteDto;
 import com.utn.dto.request.UserDto;
 import com.utn.service.Interfaces.IUserService;
 import com.utn.service.UserServiceImpl;
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PutMapping("/modificar/{userId}")
-    public ResponseEntity<?> modificarUser(@Valid @RequestBody UserDto userDto, @PathVariable Long userId) {
+    public ResponseEntity<?> modificarUser(@Valid @RequestBody UserCompleteDto userDto, @PathVariable Long userId) {
         return new ResponseEntity<>(service.modificarUser(userDto, userId), HttpStatus.OK);
     }
 

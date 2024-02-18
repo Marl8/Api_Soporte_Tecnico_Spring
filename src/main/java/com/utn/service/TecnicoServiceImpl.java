@@ -106,7 +106,6 @@ public class TecnicoServiceImpl implements ITecnicoService {
         encontrado.setNombre(tecnico.getNombre());
         encontrado.setApellido(tecnico.getApellido());
         encontrado.setDisponibilidad(tecnico.isDisponibilidad());
-        encontrado.setIncidentes(tecnico.getIncidentes());
         encontrado.setListaEspecialidades(tecnico.getListaEspecialidades());
         encontrado.setNotificacion(tecnico.getNotificacion());
 

@@ -1,5 +1,6 @@
 package com.utn.services;
 
+import com.utn.dto.request.TipoProblemaCompleteDto;
 import com.utn.dto.request.TipoProblemaDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseProblemaDto;
@@ -41,7 +42,7 @@ public class ProblemasServiceTest {
         TipoProblemaDto argumentSut = ProblemasObjectUtils.problemaDto();
         TipoProblema problema = ProblemasObjectUtils.problema2();
         List<TipoProblema> lista = new ArrayList<>();
-        ResponseProblemaDto expected = new ResponseProblemaDto(argumentSut, "Problema guardado con éxito.");
+        ResponseProblemaDto expected = new ResponseProblemaDto("Problema guardado con éxito.");
         Method mockeado = ProblemaServiceImpl.class.getDeclaredMethod("verificarSiExiste", TipoProblema.class);
         mockeado.setAccessible(true);
 
@@ -50,7 +51,7 @@ public class ProblemasServiceTest {
 
         ResponseProblemaDto actual = service.guardar(argumentSut);
 
-        assertEquals(expected.getProblema().getDescripcion(), actual.getProblema().getDescripcion());
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -70,14 +71,15 @@ public class ProblemasServiceTest {
     @Test
     @DisplayName("test OK para modificar problemas")
     void modificarProblemaTestOK() {
-        TipoProblemaDto argumentSut = ProblemasObjectUtils.problemaDto();
+        Long id = 1L;
+        TipoProblemaCompleteDto argumentSut = ProblemasObjectUtils.problemaCompleteDto();
         TipoProblema problema = ProblemasObjectUtils.problema2();
-        ResponseProblemaDto expected = new ResponseProblemaDto(argumentSut, "Tipo de problema modificado con éxito");
+        ResponseProblemaDto expected = new ResponseProblemaDto("Tipo de problema modificado con éxito");
 
         when(repository.findById(any())).thenReturn(Optional.of(problema));
         when(repository.save(any())).thenReturn(problema);
 
-        ResponseProblemaDto actual = service.modificar(argumentSut);
+        ResponseProblemaDto actual = service.modificar(argumentSut, id);
 
         assertEquals(expected, actual);
     }

@@ -1,9 +1,11 @@
 package com.utn.utils;
 
 import com.utn.dto.request.ClienteDto;
+import com.utn.dto.request.ClienteFindDto;
 import com.utn.dto.request.ClienteUpdateDto;
 import com.utn.entity.Cliente;
 import com.utn.entity.Incidente;
+import com.utn.entity.Servicio;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,6 +42,18 @@ public class ClienteObjectUtils {
         Set<Long> idServicios = new HashSet<>();
         idServicios.add(id);
         clienteDto.setServiciosId(idServicios);
+        return clienteDto;
+    }
+
+    public static ClienteFindDto clienteFindDto(){
+        ClienteFindDto clienteDto = new ClienteFindDto();
+        clienteDto.setRazonSocial("NN SA");
+        clienteDto.setCuit("30254578094");
+        clienteDto.setTelefono("0115786159");
+        clienteDto.setCorreoElectronico("nn@Gmail.com");
+        Set<Servicio> servicios = new HashSet<>();
+        servicios.add(ServicioObjectUtils.servicio());
+        clienteDto.setServicios(servicios);
         return clienteDto;
     }
 

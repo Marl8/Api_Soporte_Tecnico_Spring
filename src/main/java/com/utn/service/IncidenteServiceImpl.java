@@ -2,21 +2,14 @@ package com.utn.service;
 
 import com.utn.dto.request.IncidenteDto;
 import com.utn.dto.request.IncidenteCompleteDto;
+import com.utn.dto.request.IncidenteUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseIncidenteDto;
-import com.utn.entity.Cliente;
-import com.utn.entity.Incidente;
-import com.utn.entity.Servicio;
-import com.utn.entity.TipoProblema;
-import com.utn.exception.ClienteNotFoundException;
-import com.utn.exception.IncidenteNotFoundException;
-import com.utn.exception.ProblemaNotFoundException;
-import com.utn.exception.ServicioNotFoundException;
-import com.utn.repository.ClienteRepository;
-import com.utn.repository.IncidenteRepository;
-import com.utn.repository.ProblemaRepository;
-import com.utn.repository.ServicioRepository;
+import com.utn.entity.*;
+import com.utn.exception.*;
+import com.utn.repository.*;
 import com.utn.service.Interfaces.IIncidenteService;
+import com.utn.utils.IncidenteMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,18 +30,21 @@ public class IncidenteServiceImpl implements IIncidenteService {
 
     ProblemaRepository problemaRepository;
 
+    TecnicoRepository tecnicoRepository;
+
     public IncidenteServiceImpl(IncidenteRepository repository, ClienteRepository clienteRepository,
-                                ServicioRepository servicioRepository, ProblemaRepository problema) {
+                                ServicioRepository servicioRepository, ProblemaRepository problema,
+                                TecnicoRepository tecnicoRepository) {
         this.repository = repository;
         this.clienteRepository = clienteRepository;
         this.servicioRepository = servicioRepository;
         this.problemaRepository = problema;
+        this.tecnicoRepository = tecnicoRepository;
     }
 
     @Override
     public ResponseIncidenteDto guardar(IncidenteDto incidenteDto) {
-        ModelMapper mapper = new ModelMapper();
-        Incidente incidente = mapper.map(incidenteDto, Incidente.class);
+        Incidente incidente = IncidenteMapper.incidenteSaveMapper(incidenteDto);
 
         if(verificarSiExiste(incidente)){
             throw new RuntimeException("El servicio ya existe.");
@@ -85,27 +81,32 @@ public class IncidenteServiceImpl implements IIncidenteService {
     }
 
     @Override
-    public ResponseIncidenteDto modificar(IncidenteCompleteDto incidenteDto) {
+    public ResponseIncidenteDto modificar(IncidenteUpdateDto incidenteDto, Long id) {
         ModelMapper mapper = new ModelMapper();
         Incidente incidente = mapper.map(incidenteDto, Incidente.class);
-        Incidente encontrado = repository.findById(incidente.getId())
+        Incidente encontrado = repository.findById(id)
                 .orElseThrow(() -> new IncidenteNotFoundException("No existen incidentes con ese id.", HttpStatus.NOT_FOUND));
-
-        encontrado.setCliente(incidente.getCliente());
+        Tecnico tecnico = tecnicoRepository.findById(incidenteDto.getIdTecnico()).orElseThrow(
+                () -> new TecnicoNotFoundException("Técnico no encontrado", HttpStatus.BAD_REQUEST)
+        );
+        Set<TipoProblema> listaProblemas = new HashSet<>();
+        incidenteDto.getListaProblemas().forEach(e -> {
+            TipoProblema p = problemaRepository.findById(e).orElseThrow(() ->
+                    new EspecialidadNotFoundException("Especialidad Not found", HttpStatus.NOT_FOUND));
+            listaProblemas.add(p);
+        });
+        encontrado.setListaProblemas(listaProblemas);
         encontrado.setDescripcion(incidente.getDescripcion());
-        encontrado.setEstado(incidente.getEstado());
-        encontrado.setTecnico(incidente.getTecnico());
-        encontrado.setOperador(incidente.getOperador());
-        encontrado.setFechaCreacion(incidente.getFechaCreacion());
         encontrado.setFechaCierre(incidente.getFechaCierre());
+        encontrado.setEsComplejo(incidente.isEsComplejo());
         encontrado.setHoraColchon(incidente.getHoraColchon());
         encontrado.setListaProblemas(incidente.getListaProblemas());
         encontrado.setTiempoResolucion(incidente.getTiempoResolucion());
-        encontrado.setServicio(incidente.getServicio());
+        encontrado.setTecnico(tecnico);
 
-        if(incidente.getFechaCierre() != null){
-            incidente.modificarEstado();
-            incidente.getTecnico().setDisponibilidad(true);
+        if(encontrado.getFechaCierre() != null){
+            encontrado.modificarEstado();
+            encontrado.getTecnico().setDisponibilidad(true);
         }
         Incidente modificado = repository.save(encontrado);
         return new ResponseIncidenteDto(modificado.getDescripcion(), "Incidente modificado con éxito");

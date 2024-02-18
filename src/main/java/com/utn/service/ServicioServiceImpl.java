@@ -53,7 +53,6 @@ public class ServicioServiceImpl implements IServicioService {
 
     @Override
     public Set<ServicioDto> findAll() {
-        ModelMapper mapper = new ModelMapper();
         List<Servicio> servicios = repository.findAll();
         Set<Servicio> result = new HashSet<>(servicios);
         return result.stream().map(s -> new ServicioDto(s.getId(),

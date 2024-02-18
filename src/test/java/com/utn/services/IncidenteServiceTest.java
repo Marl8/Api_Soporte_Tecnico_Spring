@@ -2,21 +2,13 @@ package com.utn.services;
 
 import com.utn.dto.request.IncidenteCompleteDto;
 import com.utn.dto.request.IncidenteDto;
+import com.utn.dto.request.IncidenteUpdateDto;
 import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseIncidenteDto;
-import com.utn.entity.Cliente;
-import com.utn.entity.Incidente;
-import com.utn.entity.Servicio;
-import com.utn.entity.TipoProblema;
-import com.utn.repository.ClienteRepository;
-import com.utn.repository.IncidenteRepository;
-import com.utn.repository.ProblemaRepository;
-import com.utn.repository.ServicioRepository;
+import com.utn.entity.*;
+import com.utn.repository.*;
 import com.utn.service.IncidenteServiceImpl;
-import com.utn.utils.ClienteObjectUtils;
-import com.utn.utils.IncidenteObjectsUtils;
-import com.utn.utils.ProblemasObjectUtils;
-import com.utn.utils.ServicioObjectUtils;
+import com.utn.utils.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +38,9 @@ public class IncidenteServiceTest {
 
     @Mock
     ProblemaRepository problemaRepository;
+
+    @Mock
+    TecnicoRepository tecnicoRepository;
 
     @InjectMocks
     IncidenteServiceImpl service;
@@ -83,22 +78,26 @@ public class IncidenteServiceTest {
         IncidenteCompleteDto actual = service.findIncidente(id);
 
         assertEquals(expected.getDescripcion(), actual.getDescripcion());
-        assertEquals(expected.getCliente(), actual.getCliente());
         assertEquals(expected.getTiempoResolucion(), actual.getTiempoResolucion());
     }
 
     @Test
     @DisplayName("test OK para modificar incidente")
     void modificarIncidenteTestOK() {
+        Long id = 1L;
         Incidente incidente = IncidenteObjectsUtils.incidente();
         Incidente modificado = IncidenteObjectsUtils.incidente2();
-        IncidenteCompleteDto argumentSut = IncidenteObjectsUtils.incidenteCompleteDto2();
+        Tecnico tecnico = TecnicoObjectsUtils.tecnico1();
+        TipoProblema problema = ProblemasObjectUtils.problema();
+        IncidenteUpdateDto argumentSut = IncidenteObjectsUtils.incidenteUpdateDto2();
         ResponseIncidenteDto expected = new ResponseIncidenteDto(modificado.getDescripcion(), "Incidente modificado con éxito");
 
         when(repository.findById(any())).thenReturn(Optional.of(incidente));
+        when(tecnicoRepository.findById(any())).thenReturn(Optional.of(tecnico));
+        when(problemaRepository.findById(any())).thenReturn(Optional.of(problema));
         when(repository.save(any())).thenReturn(modificado);
 
-        ResponseIncidenteDto actual = service.modificar(argumentSut);
+        ResponseIncidenteDto actual = service.modificar(argumentSut, id);
 
         assertEquals(expected, actual);
     }
