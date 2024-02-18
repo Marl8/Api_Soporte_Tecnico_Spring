@@ -21,7 +21,7 @@ public class Especialidad{
     private String nombre;
     private String descripcion;
 
-    @OneToMany(mappedBy = "especialidad", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "especialidad", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<TipoProblema> listaProblemas = new HashSet<>();
 
     @ManyToMany(targetEntity = Tecnico.class, cascade = CascadeType.MERGE)

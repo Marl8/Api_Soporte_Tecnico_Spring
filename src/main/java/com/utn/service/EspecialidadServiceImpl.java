@@ -7,6 +7,7 @@ import com.utn.dto.response.ResponseDto;
 import com.utn.dto.response.ResponseEspecialidadDto;
 import com.utn.entity.Especialidad;
 import com.utn.entity.Servicio;
+import com.utn.entity.Tecnico;
 import com.utn.entity.TipoProblema;
 import com.utn.exception.EspecialidadNotFoundException;
 import com.utn.exception.ProblemaNotFoundException;
@@ -73,6 +74,24 @@ public class EspecialidadServiceImpl implements IEspecialidadService {
         ModelMapper mapper = new ModelMapper();
         Especialidad esp = repository.findById(id).orElseThrow(
                 () -> new EspecialidadNotFoundException("No existen especialidades con este id.", HttpStatus.NOT_FOUND));
+        Set<TipoProblema> listaProblemas = new HashSet<>();
+        TipoProblema problema = new TipoProblema();
+        esp.getListaProblemas().forEach(p-> {
+            problema.setId(p.getId());
+            problema.setDescripcion(p.getDescripcion());
+            listaProblemas.add(problema);
+        });
+        Set<Tecnico> listaTecnicos = new HashSet<>();
+        Tecnico tecnico = new Tecnico();
+        esp.getListaTecnicos().forEach(t -> {
+            tecnico.setId(t.getId());
+            tecnico.setNombre(t.getNombre());
+            tecnico.setApellido(t.getApellido());
+            tecnico.setDisponibilidad(t.isDisponibilidad());
+            tecnico.setNotificacion(t.getNotificacion());
+        });
+        esp.setListaProblemas(listaProblemas);
+        esp.setListaTecnicos(listaTecnicos);
         return mapper.map(esp, EspecialidadFindDto.class);
     }
 
