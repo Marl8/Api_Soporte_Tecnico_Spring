@@ -13,9 +13,7 @@ public class ClienteUpdateDto {
 
     @Positive(message = "Id debe ser un número positivo")
     private Long id;
-    @NotBlank(message = "Nombre es requerido")
     private String nombre;
-    @NotBlank(message = "Apellido es requerido")
     private String apellido;
     @NotBlank(message = "Razón Social es requerido")
     private String razonSocial;

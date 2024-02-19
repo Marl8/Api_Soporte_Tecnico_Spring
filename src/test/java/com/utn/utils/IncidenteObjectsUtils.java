@@ -89,7 +89,6 @@ public class IncidenteObjectsUtils {
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
         incidente.setIdCliente(1L);
         incidente.setIdServicio(1L);
-        incidente.setIdTecnico(1L);
         Set<Long> listaIdProblemas = new HashSet<>();
         listaIdProblemas.add(1L);
         incidente.setListaProblemas(listaIdProblemas);
@@ -114,10 +113,9 @@ public class IncidenteObjectsUtils {
     public static IncidenteCompleteDto incidenteCompleteDto(){
         IncidenteCompleteDto incidente = new IncidenteCompleteDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
-        incidente.setCliente(ClienteObjectUtils.cliente());
+        incidente.setIdcliente(1L);
         incidente.setFechaCreacion(LocalDateTime.now());
         incidente.setEsComplejo(false);
-        incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
         return incidente;
     }
 

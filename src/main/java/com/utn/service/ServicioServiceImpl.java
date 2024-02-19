@@ -69,7 +69,6 @@ public class ServicioServiceImpl implements IServicioService {
 
         encontrado.setTipoServicio(servicio.getTipoServicio());
         encontrado.setDescripcion(servicio.getDescripcion());
-        encontrado.setClientes(servicio.getClientes());
 
         Servicio modificado = repository.save(encontrado);
         return new ResponseServicioDto(modificado.getTipoServicio(), modificado.getDescripcion(), "Servicio modificado con éxito");

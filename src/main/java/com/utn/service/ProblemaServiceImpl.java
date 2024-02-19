@@ -53,7 +53,6 @@ public class ProblemaServiceImpl implements IProblemaService {
         encontrado.setEspecialidad(problema.getEspecialidad());
         encontrado.setDescripcion(problema.getDescripcion());
         encontrado.setTiempoEstimado(problema.getTiempoEstimado());
-        encontrado.setIncidente(problema.getIncidente());
 
         repository.save(encontrado);
         return new ResponseProblemaDto("Tipo de problema modificado con éxito");

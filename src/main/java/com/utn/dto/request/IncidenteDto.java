@@ -20,11 +20,7 @@ public class IncidenteDto {
     @NotBlank(message = "Descripción es requerido")
     private String descripcion;
     @Positive(message = "Debe ser un número positivo")
-    private int tiempoResolucion;
-    @Positive(message = "Debe ser un número positivo")
     private Long idServicio;
-    @Positive(message = "Debe ser un número positivo")
-    private Long idTecnico;
     @Positive(message = "Debe ser un número positivo")
     private Long idCliente;
     @NotEmpty(message = "No puede ser una lista vacía")

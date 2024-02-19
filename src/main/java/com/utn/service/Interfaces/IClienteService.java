@@ -13,7 +13,7 @@ public interface IClienteService {
 
     ClienteFindDto findCliente(Long id);
 
-    ResponseClienteDto modificar(ClienteUpdateDto clienteDto);
+    ResponseClienteDto modificar(ClienteUpdateDto clienteDto, Long id);
 
     ResponseDto eliminar(Long id);
 }

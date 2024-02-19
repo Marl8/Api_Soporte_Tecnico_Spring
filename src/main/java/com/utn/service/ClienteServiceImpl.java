@@ -68,7 +68,7 @@ public class ClienteServiceImpl implements IClienteService {
                 .orElseThrow(() -> new ServicioNotFoundException("Servicio no encontrado", HttpStatus.NOT_FOUND));
         cliente.getServicios().add(servicio);
         ClienteUpdateDto clienteResponse = mapper.map(cliente, ClienteUpdateDto.class);
-        this.modificar(clienteResponse);
+        this.modificar(clienteResponse, clienteResponse.getId());
         return new ResponseDto("Asignación realizada con éxito");
     }
 
@@ -89,10 +89,10 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
-    public ResponseClienteDto modificar(ClienteUpdateDto clienteDto) {
+    public ResponseClienteDto modificar(ClienteUpdateDto clienteDto, Long id) {
 
         Cliente cliente = mapper.map(clienteDto, Cliente.class);
-        Cliente encontrado = repository.findById(cliente.getId()).orElseThrow(
+        Cliente encontrado = repository.findById(id).orElseThrow(
                 () -> new ClienteNotFoundException("Cliente inexistente", HttpStatus.NOT_FOUND));
         encontrado.setNombre(cliente.getNombre());
         encontrado.setApellido(cliente.getApellido());

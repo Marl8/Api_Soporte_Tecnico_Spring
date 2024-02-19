@@ -22,8 +22,10 @@ public class Tecnico extends Persona{
     @Enumerated(EnumType.STRING)
     private MedioNotificacionEnum notificacion;
 
-    @ManyToMany(mappedBy = "listaTecnicos", cascade = CascadeType.MERGE)
-    private Set<Especialidad> listaEspecialidades = new HashSet<>();
+    @ManyToMany(targetEntity = Especialidad.class, cascade = CascadeType.ALL)
+    @JoinTable(name = "especialidad_tecnico", joinColumns = @JoinColumn(name = "fk_tecnico"),
+            inverseJoinColumns = @JoinColumn(name = "fk_especialidad"))
+    private Set<Especialidad> listaEspecialidades;
 
     @OneToMany(mappedBy = "tecnico")
     private Set<Incidente> incidentes;

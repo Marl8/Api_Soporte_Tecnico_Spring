@@ -32,9 +32,10 @@ public class OperadorController {
         return new ResponseEntity<>(service.findOperador(id), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody OperadorUpdateDto operadorDto) {
-        return new ResponseEntity<>(service.modificar(operadorDto), HttpStatus.OK);
+    @PutMapping("/modificar/{id}")
+    public ResponseEntity<?> modificar(@Valid @RequestBody OperadorUpdateDto operadorDto,
+                                       @Positive(message = "Debe ser un número positivo") @PathVariable Long id) {
+        return new ResponseEntity<>(service.modificar(operadorDto, id), HttpStatus.OK);
     }
 
     @PutMapping("listaTecnicos/{idOperador}")

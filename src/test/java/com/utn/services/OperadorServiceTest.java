@@ -87,6 +87,7 @@ public class OperadorServiceTest {
     @Test
     @DisplayName("test OK para modificar operador")
     void modificarOperadorTestOK() {
+        Long id = 1L;
         Operador operador = OperadorObjectUtils.operador();
         OperadorUpdateDto argumentSut = OperadorObjectUtils.operadorUpdateDto();
         Operador modificado = OperadorObjectUtils.operador2();
@@ -95,7 +96,7 @@ public class OperadorServiceTest {
         when(repository.findById(any())).thenReturn(Optional.of(operador));
         when(repository.save(any())).thenReturn(modificado);
 
-        ResponseOperadorDto actual = servicio.modificar(argumentSut);
+        ResponseOperadorDto actual = servicio.modificar(argumentSut, id);
 
         assertEquals(expected, actual);
     }

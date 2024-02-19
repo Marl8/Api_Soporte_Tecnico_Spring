@@ -17,6 +17,4 @@ public class TipoProblemaCompleteDto {
     private String descripcion;
     @Positive(message = "Id debe ser un número positivo")
     private int tiempoEstimado;
-    private Especialidad especialidad;
-    private Incidente incidente;
 }

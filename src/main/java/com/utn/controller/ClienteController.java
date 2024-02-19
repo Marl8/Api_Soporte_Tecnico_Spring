@@ -33,8 +33,9 @@ public class ClienteController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modificar(@Valid @RequestBody ClienteUpdateDto clienteDto) {
-        return new ResponseEntity<>(service.modificar(clienteDto), HttpStatus.OK);
+    public ResponseEntity<?> modificar(@Valid @RequestBody ClienteUpdateDto clienteDto,
+                                       @Positive(message = "Debe ser un número positivo") @PathVariable Long id) {
+        return new ResponseEntity<>(service.modificar(clienteDto, id), HttpStatus.OK);
     }
 
     @PutMapping("/asignar/{idCliente}/{idServicio}")

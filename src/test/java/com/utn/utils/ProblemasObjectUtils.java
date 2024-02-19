@@ -37,8 +37,6 @@ public class ProblemasObjectUtils {
         TipoProblemaCompleteDto problema = new TipoProblemaCompleteDto();
         problema.setDescripcion("Error al iniciar Tango");
         problema.setTiempoEstimado(12);
-        problema.setEspecialidad(EspecialidadObjectUtils.especialidad());
-        problema.setIncidente(IncidenteObjectsUtils.incidente());
         return problema;
     }
 

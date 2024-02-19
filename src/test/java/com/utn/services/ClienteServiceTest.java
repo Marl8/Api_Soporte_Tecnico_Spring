@@ -107,6 +107,7 @@ public class ClienteServiceTest {
     @Test
     @DisplayName("test OK para  modificar cliente")
     void modificarClienteTestOk(){
+        Long id = 1L;
         Cliente cliente = ClienteObjectUtils.cliente();
         Cliente modificado = ClienteObjectUtils.clienteModificado();
         ClienteUpdateDto argumentoSut = ClienteObjectUtils.clienteUpdateDto();
@@ -116,7 +117,7 @@ public class ClienteServiceTest {
         when(repository.findById(any())).thenReturn(Optional.of(cliente));
         when(repository.save(any())).thenReturn(modificado);
 
-        ResponseClienteDto actual = clienteService.modificar(argumentoSut);
+        ResponseClienteDto actual = clienteService.modificar(argumentoSut, id);
 
         assertEquals(expected, actual);
     }

@@ -1,17 +1,17 @@
 package com.utn.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 @Table(name = "especialidad")
 public class Especialidad{
 
@@ -24,8 +24,28 @@ public class Especialidad{
     @OneToMany(mappedBy = "especialidad", fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<TipoProblema> listaProblemas = new HashSet<>();
 
-    @ManyToMany(targetEntity = Tecnico.class, cascade = CascadeType.MERGE)
-    @JoinTable(name = "especialidad-tecnico", joinColumns = @JoinColumn(name = "fk_especialidad"),
-            inverseJoinColumns = @JoinColumn(name = "fk_tecnico"))
-    private Set<Tecnico> listaTecnicos = new HashSet<>();
+    @ManyToMany(mappedBy = "listaEspecialidades", cascade = CascadeType.ALL)
+    private Set<Tecnico> listaTecnicos;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Especialidad that = (Especialidad) o;
+        return Objects.equals(id, that.id) && Objects.equals(nombre, that.nombre) && Objects.equals(descripcion, that.descripcion) && Objects.equals(listaProblemas, that.listaProblemas) && Objects.equals(listaTecnicos, that.listaTecnicos);
+    }
+
+    @Override
+    public String toString() {
+        return "Especialidad{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, descripcion, listaProblemas, listaTecnicos);
+    }
 }

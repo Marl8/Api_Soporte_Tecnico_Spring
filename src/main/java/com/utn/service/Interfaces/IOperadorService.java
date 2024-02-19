@@ -12,7 +12,7 @@ public interface IOperadorService {
 
     OperadorDto findOperador(Long id);
 
-    ResponseOperadorDto modificar(OperadorUpdateDto operadorDto);
+    ResponseOperadorDto modificar(OperadorUpdateDto operadorDto, Long id);
 
     ResponseDto eliminar(Long id);
 

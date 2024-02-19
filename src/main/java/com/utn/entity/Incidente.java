@@ -71,6 +71,6 @@ public class Incidente {
 
     @Override
     public String toString() {
-        return "Incidente{" + "id=" + id + ", descripcion=" + descripcion + ", estado=" + estado + ", tiempoResolucion=" + tiempoResolucion + ", fechaCreacion=" + fechaCreacion + ", fechaCierre=" + fechaCierre + ", horaColchon=" + horaColchon + ", servicio=" + servicio + ", tecnico=" + tecnico + ", cliente=" + cliente + ", listaProblemas=" + listaProblemas + '}';
+        return "Incidente{" + "id=" + id + ", descripcion=" + descripcion + ", estado=" + estado + ", tiempoResolucion=" + tiempoResolucion + ", fechaCreacion=" + fechaCreacion + ", fechaCierre=" + fechaCierre + ", horaColchon=" + horaColchon + ", servicio=" + servicio + ", tecnico=" + tecnico + ", cliente=" + cliente + '}';
     }
 }

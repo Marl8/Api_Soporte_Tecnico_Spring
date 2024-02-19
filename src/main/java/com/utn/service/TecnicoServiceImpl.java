@@ -71,7 +71,9 @@ public class TecnicoServiceImpl implements ITecnicoService {
                 .orElseThrow(() -> new EspecialidadNotFoundException("Especialidad no encontrada", HttpStatus.NOT_FOUND));
         Tecnico tecnico = repository.findById(idTecnico)
                 .orElseThrow(() -> new TecnicoNotFoundException("Técnico no encontrado", HttpStatus.NOT_FOUND));
-        tecnico.getListaEspecialidades().add(esp);
+        Set<Especialidad> lista = tecnico.getListaEspecialidades();
+        lista.add(esp);
+        tecnico.setListaEspecialidades(lista);
         repository.save(tecnico);
         return new ResponseDto("Asignación realizada con éxito");
     }

@@ -29,13 +29,13 @@ public class IncidenteCompleteDto {
     @Positive(message = "Debe ser un número positivo")
     private int horaColchon;
     @NotEmpty(message = "No puede ser una lista vacía")
-    private Set<TipoProblema> listaProblemas;
+    private Set<Long> listaProblemas;
     @NotNull(message = "Debe contener un técnico")
-    private Tecnico Tecnico;
+    private Long idTecnico;
     @NotNull(message = "Debe contener un cliente")
-    private Cliente cliente;
+    private Long idcliente;
     @NotNull(message = "Debe contener un servicio")
-    private Servicio servicio;
+    private long idServicio;
     @NotNull(message = "Debe contener un operado")
-    private Operador operador;
+    private Long idOperador;
 }

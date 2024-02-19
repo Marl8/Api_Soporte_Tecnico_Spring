@@ -63,10 +63,10 @@ public class OperadorServiceImpl implements IOperadorService {
     }
 
     @Override
-    public ResponseOperadorDto modificar(OperadorUpdateDto operadorDto) {
+    public ResponseOperadorDto modificar(OperadorUpdateDto operadorDto, Long id) {
         ModelMapper mapper = new ModelMapper();
         Operador operador = mapper.map(operadorDto, Operador.class);
-        Operador encontrado = repository.findById(operador.getId())
+        Operador encontrado = repository.findById(id)
                 .orElseThrow(() -> new OperadorNotFoundException("No existen operadores con ese id.", HttpStatus.NOT_FOUND));
 
         encontrado.setNombre(operador.getNombre());
@@ -112,13 +112,16 @@ public class OperadorServiceImpl implements IOperadorService {
 
         // Se le asigna al incidente un técnico de forma aleatoria según el tipo de problema
         List<Tecnico> listTecnicosEspIncidente = tecnicosEspecialidadesIncidente(incident);
-
-        List<Tecnico> tecnicosDisponibles = new ArrayList<>(listTecnicosEspIncidente.stream()
-                .filter(Tecnico::isDisponibilidad).toList());
+        System.out.println(listTecnicosEspIncidente);
+        List<Tecnico> tecnicosDisponibles = new ArrayList<>(listTecnicosEspIncidente.stream().filter(Tecnico::isDisponibilidad).toList());
+        System.out.println(tecnicosDisponibles);
+        System.out.println(tecnicosDisponibles.size());
         Tecnico tecnico;
+
         if (!tecnicosDisponibles.isEmpty()) {
             Collections.shuffle(tecnicosDisponibles);
             tecnico = tecnicosDisponibles.get(0);
+            tecnico.setDisponibilidad(false);
             incident.setTecnico(tecnico);
         }else {
             throw new TecnicoNotFoundException("No se han encontrado técnicos disponibles", HttpStatus.NOT_FOUND);
@@ -138,10 +141,11 @@ public class OperadorServiceImpl implements IOperadorService {
 
         // Se genera la lista de las especialidades requeridas según los tipos de problemas reportados en el incidente.
         incident.getListaProblemas().forEach(p -> listaEspecialidadesIncidente.add(p.getEspecialidad()));
-        System.out.println(listaEspecialidadesIncidente);
+        System.out.println(incident.getListaProblemas());
+        System.out.println("Lista espe: " + listaEspecialidadesIncidente);
 
         List<Tecnico> listaTecnicos = tecnicoRepository.findAll();
-        System.out.println(listaTecnicos);
+        System.out.println("tecnicos " + listaTecnicos);
         List<Tecnico> listaEspecialidad;
 
        // Se genera una lista con los técnicos que tengan dichas especialidades.
@@ -153,6 +157,7 @@ public class OperadorServiceImpl implements IOperadorService {
         }else {
             throw new TecnicoNotFoundException("Not found técnicos", HttpStatus.BAD_REQUEST);
         }
+        System.out.println("Lista: " + listaEspecialidad);
         return listaEspecialidad;
     }
 

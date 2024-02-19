@@ -59,6 +59,9 @@ public class IncidenteServiceImpl implements IIncidenteService {
                     () -> new ProblemaNotFoundException("Problema Not found", HttpStatus.NOT_FOUND));
             problemas.add(problema);
             });
+        problemas.forEach(p -> {
+            p.setIncidente(incidente);
+        });
         incidente.setCliente(cliente);
         incidente.setServicio(servicio);
         incidente.setListaProblemas(problemas);
@@ -71,13 +74,12 @@ public class IncidenteServiceImpl implements IIncidenteService {
 
     @Override
     public IncidenteCompleteDto findIncidente(Long id) {
-        ModelMapper mapper = new ModelMapper();
 
         if(!repository.existsById(id)){
             throw new IncidenteNotFoundException("No existen incidentes con ese id.", HttpStatus.NOT_FOUND);
         }
         Incidente incidente = repository.findById(id).get();
-        return mapper.map(incidente, IncidenteCompleteDto.class);
+        return IncidenteMapper.incidenteCompleteMapper(incidente);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.utn.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,6 @@ public class TipoProblema{
 
     @Override
     public String toString() {
-        return "TipoProblema{" + "id=" + id + ", descripcion=" + descripcion + ", tiempoEstimado=" + tiempoEstimado + ", incidente=" + incidente + ", especialidad=" + especialidad + '}';
+        return "TipoProblema{" + "id=" + id + ", descripcion=" + descripcion + ", tiempoEstimado=" + tiempoEstimado + ", especialidad=" + especialidad + '}';
     }
 }
