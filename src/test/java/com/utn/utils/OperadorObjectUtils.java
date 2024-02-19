@@ -23,6 +23,14 @@ public class OperadorObjectUtils {
         return operador;
     }
 
+    public static Operador operador3(){
+        Operador operador = new Operador();
+        operador.setId(1L);
+        operador.setNombre("Luis");
+        operador.setApellido("Sanchez");
+        return operador;
+    }
+
     public static OperadorDto operadorDto(){
         OperadorDto operador = new OperadorDto();
         operador.setNombre("Luis");

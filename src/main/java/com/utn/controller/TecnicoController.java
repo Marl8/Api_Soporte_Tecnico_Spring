@@ -49,6 +49,11 @@ public class TecnicoController {
         return new ResponseEntity<>(service.asignarEspecialidadATecnico(idEspecialidad, idTecnico), HttpStatus.OK);
     }
 
+    @PutMapping("/incidenteResuelto/{idIncidente}")
+    public ResponseEntity<?> incidenteResuelto(@PathVariable @Positive(message = "Debe ser un número positivo") Long idIncidente) {
+        return new ResponseEntity<>(service.incidenteResuelto(idIncidente), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable @Positive(message = "Debe ser un número positivo") Long id) {
         return new ResponseEntity<>(service.eliminar(id), HttpStatus.OK);
@@ -59,10 +64,10 @@ public class TecnicoController {
         return new ResponseEntity<>(service.tecnicoConMasResueltos(dias), HttpStatus.OK);
     }
 
-    @GetMapping("/PorEspecialidadResueltos/{dias}")
+    @GetMapping("/PorEspecialidadResueltos")
     public ResponseEntity<?> findTecnicoEspecialidadMasResueltos(
-            @PathVariable @Positive(message = "Debe ser un número positivo") long dias,
-            @PathVariable @NotBlank(message = "Debe indicarse una especialidad") String especialidad) {
+            @RequestParam @Positive(message = "Debe ser un número positivo") long dias,
+            @RequestParam @NotBlank(message = "Debe indicarse una especialidad") String especialidad) {
         return new ResponseEntity<>(service.tecnicoEspecialidadMasResueltos(dias, especialidad), HttpStatus.OK);
     }
 

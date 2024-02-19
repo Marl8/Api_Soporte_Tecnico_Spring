@@ -97,13 +97,9 @@ public class IncidenteServiceImpl implements IIncidenteService {
                     new EspecialidadNotFoundException("Especialidad Not found", HttpStatus.NOT_FOUND));
             listaProblemas.add(p);
         });
+
         encontrado.setListaProblemas(listaProblemas);
         encontrado.setDescripcion(incidente.getDescripcion());
-        encontrado.setFechaCierre(incidente.getFechaCierre());
-        encontrado.setEsComplejo(incidente.isEsComplejo());
-        encontrado.setHoraColchon(incidente.getHoraColchon());
-        encontrado.setListaProblemas(incidente.getListaProblemas());
-        encontrado.setTiempoResolucion(incidente.getTiempoResolucion());
         encontrado.setTecnico(tecnico);
 
         if(encontrado.getFechaCierre() != null){

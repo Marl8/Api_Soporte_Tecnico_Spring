@@ -16,6 +16,8 @@ public interface ITecnicoService {
 
     ResponseTecnicoDto modificar(TecnicoCompleteDto tecnicoDto);
 
+    ResponseDto incidenteResuelto(Long id);
+
     ResponseDto eliminar(Long id);
 
     Set<TecnicoFindDto> findAll();

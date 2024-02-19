@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ import java.util.Optional;
 public interface IncidenteRepository extends JpaRepository<Incidente, Long> {
 
     @Query("SELECT i FROM Incidente i WHERE i.fechaCierre >= ?1 AND i.estado = ?2")
-    List<Incidente> findIncidenteByEstadoAndFecha(LocalDate fechaBusqueda, EEstado estado);
+    List<Incidente> findIncidenteByEstadoAndFecha(LocalDateTime fechaBusqueda, EEstado estado);
 
     List<Incidente> findIncidenteByEstado(EEstado estado);
 }

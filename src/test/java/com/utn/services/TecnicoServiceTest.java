@@ -130,6 +130,23 @@ public class TecnicoServiceTest {
     }
 
     @Test
+    @DisplayName("test OK para incidente resuelto")
+    void incidenteResueltoTestOK() {
+        Long id = 1L;
+        Incidente incidente = IncidenteObjectsUtils.incidente();
+        Incidente resuelto = IncidenteObjectsUtils.incidente7();
+        ResponseDto expected = new ResponseDto("Incidente resuelto favorablemente por el técnico " + resuelto.getTecnico().getNombre() +
+                " " + resuelto.getTecnico().getApellido());
+
+        when(incidenteRepository.findById(any())).thenReturn(Optional.of(incidente));
+        when(incidenteRepository.save(any())).thenReturn(resuelto);
+
+        ResponseDto actual = service.incidenteResuelto(id);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     @DisplayName("test OK para eliminar un técnico")
     void eliminarTecnicoTestOK() {
         Tecnico tecnico = TecnicoObjectsUtils.tecnico1();

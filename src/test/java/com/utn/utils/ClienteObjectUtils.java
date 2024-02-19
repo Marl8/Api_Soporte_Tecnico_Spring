@@ -32,6 +32,17 @@ public class ClienteObjectUtils {
         return cliente;
     }
 
+    public static Cliente cliente3(){
+        Cliente cliente = new Cliente();
+        cliente.setId(1L);
+        cliente.setRazonSocial("NN SA");
+        cliente.setCuit("30254578094");
+        cliente.setTelefono("0115786159");
+        cliente.setCorreoElectronico("nn@Gmail.com");
+        return cliente;
+    }
+
+
     public static ClienteDto clienteDto(){
         ClienteDto clienteDto = new ClienteDto();
         clienteDto.setRazonSocial("NN SA");

@@ -22,6 +22,14 @@ public class ServicioObjectUtils {
         return servicio;
     }
 
+    public static Servicio servicio3(){
+        Servicio servicio = new Servicio();
+        servicio.setId(1L);
+        servicio.setTipoServicio("Servicio Técnico Windows");
+        servicio.setDescripcion("Servicio para sistemas operativos de Microsoft");
+        return servicio;
+    }
+
     public static ServicioDto servicioDto(){
         ServicioDto servicio = new ServicioDto();
         servicio.setTipoServicio("Servicio Técnico Windows");

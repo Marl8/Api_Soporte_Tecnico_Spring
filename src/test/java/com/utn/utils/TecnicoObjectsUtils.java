@@ -44,6 +44,17 @@ public class TecnicoObjectsUtils {
         return tecnico;
     }
 
+    public static Tecnico tecnico4(){
+        Tecnico tecnico = new Tecnico();
+        tecnico.setId(1L);
+        tecnico.setDisponibilidad(true);
+        tecnico.setNombre("Juan");
+        tecnico.setApellido("Sosa");
+        tecnico.setListaEspecialidades(EspecialidadObjectUtils.listaSetEspecialidades());
+        tecnico.setNotificacion(MedioNotificacionEnum.EMAIL);
+        return tecnico;
+    }
+
     public static TecnicoDto tecnicoDto(){
         TecnicoDto tecnico = new TecnicoDto();
         tecnico.setDisponibilidad(true);

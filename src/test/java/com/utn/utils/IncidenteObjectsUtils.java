@@ -20,12 +20,17 @@ public class IncidenteObjectsUtils {
         incidente.setCliente(ClienteObjectUtils.cliente());
         incidente.setFechaCreacion(LocalDateTime.now());
         incidente.setEsComplejo(false);
+        incidente.setOperador(OperadorObjectUtils.operador3());
+        incidente.setServicio(ServicioObjectUtils.servicio3());
+        incidente.setTecnico(TecnicoObjectsUtils.tecnico4());
+        incidente.setCliente(ClienteObjectUtils.cliente3());
         incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
         return incidente;
     }
 
     public static Incidente incidente2(){
         Incidente incidente = new Incidente();
+        incidente.setDescripcion("Problemas con la instalación en Linux");
         incidente.setCliente(ClienteObjectUtils.cliente2());
         incidente.setTecnico(TecnicoObjectsUtils.tecnico1());
         incidente.setFechaCreacion(LocalDateTime.of(2024, 1,30, 10,25));
@@ -84,6 +89,21 @@ public class IncidenteObjectsUtils {
         return incidente;
     }
 
+    public static Incidente incidente7(){
+        Incidente incidente = new Incidente();
+        incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
+        incidente.setCliente(ClienteObjectUtils.cliente());
+        incidente.setFechaCreacion(LocalDateTime.now());
+        incidente.setFechaCierre(LocalDateTime.now());
+        incidente.setEsComplejo(false);
+        incidente.setOperador(OperadorObjectUtils.operador3());
+        incidente.setServicio(ServicioObjectUtils.servicio3());
+        incidente.setTecnico(TecnicoObjectsUtils.tecnico4());
+        incidente.setCliente(ClienteObjectUtils.cliente3());
+        incidente.setListaProblemas(ProblemasObjectUtils.listaProblemas());
+        return incidente;
+    }
+
     public static IncidenteDto incidenteDto(){
         IncidenteDto incidente = new IncidenteDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
@@ -98,14 +118,12 @@ public class IncidenteObjectsUtils {
     public static IncidenteUpdateDto incidenteUpdateDto(){
         IncidenteUpdateDto incidente = new IncidenteUpdateDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
-        incidente.setEsComplejo(false);
         return incidente;
     }
 
     public static IncidenteUpdateDto incidenteUpdateDto2(){
         IncidenteUpdateDto incidente = new IncidenteUpdateDto();
-        incidente.setFechaCierre(LocalDateTime.now());
-        incidente.setEsComplejo(false);
+        incidente.setDescripcion("Problemas con la instalación en Linux");
         incidente.setListaProblemas(Set.of(1L));
         return incidente;
     }
@@ -114,6 +132,13 @@ public class IncidenteObjectsUtils {
         IncidenteCompleteDto incidente = new IncidenteCompleteDto();
         incidente.setDescripcion("Problemas con el inicio de sesión en Windows 11");
         incidente.setIdcliente(1L);
+        incidente.setIdOperador(1L);
+        incidente.setIdServicio(1L);
+        incidente.setIdTecnico(1L);
+        Set<Long> listaProblemas = new HashSet<>();
+        Long id = 1L;
+        listaProblemas.add(id);
+        incidente.setListaProblemas(listaProblemas);
         incidente.setFechaCreacion(LocalDateTime.now());
         incidente.setEsComplejo(false);
         return incidente;

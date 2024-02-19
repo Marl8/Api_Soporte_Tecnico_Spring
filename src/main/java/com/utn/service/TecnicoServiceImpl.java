@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -126,6 +127,20 @@ public class TecnicoServiceImpl implements ITecnicoService {
         return new ResponseDto("Técnico eliminado con éxito");
     }
 
+    @Override
+    public ResponseDto incidenteResuelto(Long id){
+        Incidente incidente = incidenteRepository.findById(id).orElseThrow(
+                () -> new IncidenteNotFoundException("Incident not found", HttpStatus.BAD_REQUEST));
+        LocalDateTime fechaResolucion = LocalDateTime.now();
+        incidente.setFechaCierre(fechaResolucion);
+        incidente.getTecnico().setDisponibilidad(true);
+        incidente.modificarEstado();
+        incidenteRepository.save(incidente);
+        return new ResponseDto("Incidente resuelto favorablemente por el técnico " + incidente.getTecnico().getNombre() +
+                " " + incidente.getTecnico().getApellido());
+    }
+
+
     /**
      * Método para encontrar al técnico que más incidentes resolvió en los últimos N días.
      * @param dias El rango de los últimos días para realizar la búsqueda
@@ -140,7 +155,12 @@ public class TecnicoServiceImpl implements ITecnicoService {
         **/
         LocalDate fechaBusqueda = LocalDate.now().minusDays(dias);
 
-        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fechaBusqueda, EEstado.RESUELTO);
+        LocalTime horaMinutos = LocalTime.now();
+
+        // Convierto al LocalDate a LocalDateTime
+        LocalDateTime fecha = LocalDateTime.of(fechaBusqueda, horaMinutos);
+
+        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fecha, EEstado.RESUELTO);
 
         // Recorro la lista de incidentes y agrupo por cantidad de incidentes resueltos por cada técnico
         Map<Tecnico, Long> resueltos = incidentes.stream()
@@ -167,7 +187,12 @@ public class TecnicoServiceImpl implements ITecnicoService {
 
         LocalDate fechaBusqueda = LocalDate.now().minusDays(dias);
 
-        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fechaBusqueda, EEstado.RESUELTO);
+        LocalTime horaMinutos = LocalTime.now();
+
+        // Convierto al LocalDate a LocalDateTime
+        LocalDateTime fecha = LocalDateTime.of(fechaBusqueda, horaMinutos);
+
+        List<Incidente> incidentes = incidenteRepository.findIncidenteByEstadoAndFecha(fecha, EEstado.RESUELTO);
         List<Incidente> incidentesPorEspecialidad = new ArrayList<>();
         Tecnico tecnicoConMasIncidentes;
 
@@ -229,6 +254,6 @@ public class TecnicoServiceImpl implements ITecnicoService {
         ModelMapper mapper = new ModelMapper();
         TecnicoCompleteDto dto = mapper.map(tecnicoMasRapido, TecnicoCompleteDto.class);
         return new ResponseTecnicoDto("El técnico que más rápido resolvió un incidente" +
-                "fue: " + tecnicoMasRapido.getNombre() + " " + dto.getApellido());
+                " fue: " + tecnicoMasRapido.getNombre() + " " + dto.getApellido());
     }
 }
