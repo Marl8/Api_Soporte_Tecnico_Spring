@@ -197,7 +197,7 @@ public class TecnicoServiceTest {
     void tecnicoMasRapidoTestOK() {
         List<Incidente> listaIncidentes = IncidenteObjectsUtils.listaIncidentes();
         ResponseTecnicoDto expected = new ResponseTecnicoDto("El técnico que más rápido resolvió un incidente" +
-                "fue: Ariel Canale");
+                " fue: Ariel Canale");
 
         when(incidenteRepository.findIncidenteByEstado(any())).thenReturn(listaIncidentes);
 

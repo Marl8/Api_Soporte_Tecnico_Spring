@@ -60,8 +60,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResponseUserDto modificarUser(UserCompleteDto userDto, Long userId) {
-        ModelMapper mapper = new ModelMapper();
-        UserEntity usuario = mapper.map(userDto, UserEntity.class);
+        UserEntity usuario = UserMapper.userUpdate(userDto);
         UserEntity encontrado = repository.findById(userId).orElseThrow(
                 () -> new UserCustomException("Usuario no encontrado", HttpStatus.BAD_REQUEST)
         );
