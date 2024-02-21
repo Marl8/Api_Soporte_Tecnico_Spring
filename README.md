@@ -2,7 +2,7 @@
 <br>
 Proyecto realizado en Spring Boot 3
 
- ### <h3 align="center">💻 Contexto general 💻</h3>
+ ### <h3 align="center">💻 Contexto general de la aplicación 💻</h3>
 <hr>
 <p> 
 Una importante empresa de soporte operativo solicita el diseño y desarrollo de un sistema
