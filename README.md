@@ -1,6 +1,6 @@
 # <h1 align="center">⭐ Api Soporte Técnico ⭐</h1>
 <br>
-Proyecto realizado en Spring Boot 3
+Proyecto realizado con Spring Boot 3 
 
  ### <h3 align="center">💻 Contexto general de la aplicación 💻</h3>
 <hr>
@@ -18,6 +18,8 @@ altas, bajas y modificaciones de los datos de cada uno de ellos.
 Finalmente, la mesa de ayuda es responsable de atender las llamadas e ingresar al sistema los
 incidentes reportados.
 </p>
+
+<hr>
 
  ### <h3 align="center">💻 Modelado DER 💻</h3>
 
